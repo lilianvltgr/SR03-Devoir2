@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form action="/submit-form-url" method="POST">
+<form id="myForm" onsubmit="return validateForm()">
     <label for="nom">Nom :</label>
     <input type="text" id="nom" name="nom" required>
 
@@ -31,4 +31,5 @@
 </form>
 </article>
 </body>
+<script src="/dynamic/script.js"></script>
 </html>
