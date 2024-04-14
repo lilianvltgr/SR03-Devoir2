@@ -1,13 +1,38 @@
 package model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+/*
+Dans le contexte de JPA, une entité représente une table dans la base de données relationnelle.
+Chaque instance de cette classe représente une ligne dans cette table.
+ */
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int userId;
     boolean admin;
     boolean actif;
-    int userId;
     String nom;
     String prenom;
     String mail;
     String passWord;
+
+    public User(boolean admin, boolean actif, int userId, String nom, String prenom, String mail, String passWord) {
+        this.admin = admin;
+        this.actif = actif;
+        this.userId = userId;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.mail = mail;
+        this.passWord = passWord;
+    }
+
+    public User() {
+        // constructeur sans argument demandé
+    }
 
     //region setters and getters
     public boolean getAdmin() {
@@ -67,15 +92,7 @@ public class User {
     }
 
     //endregion
-    public User(boolean admin, boolean actif, int userId, String nom, String prenom, String mail, String passWord) {
-        this.admin = admin;
-        this.actif = actif;
-        this.userId = userId;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.mail = mail;
-        this.passWord = passWord;
-    }
+
 
     public static void main(String[] args) {
         User user = new User(true, true, 1, "Voltigeur", "Lilian", "lilian.voltigeur@etu.utc.fr", "testestest");
