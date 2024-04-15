@@ -1,15 +1,29 @@
 aside {
-    background-color: #f4f4f4; /* Couleur de fond */
-    padding: 20px; /* Espacement interne */
+    background-color: antiquewhite; /* Couleur de fond */
+    color: cadetblue; /* Couleur du texte */
+    font-size: 1rem; /* Taille de police ajustée */
+    padding: 10px; /* Marge intérieure */
     width: 200px; /* Largeur de l'élément */
     float: left; /* Positionnement à droite */
     margin: 10px 0; /* Marge externe */
     box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Ombre portée légère */
 }
 header {
-    background-color: #333; /* Couleur de fond */
-    color: white; /* Couleur du texte */
+    background-color: antiquewhite; /* Couleur de fond */
+    color: cadetblue; /* Couleur du texte */
+    font-size: 1rem; /* Taille de police ajustée */
+    padding: 10px; /* Marge intérieure */
     text-align: center; /* Alignement du texte */
-    padding: 1em 0; /* Espacement interne pour donner de la hauteur */
-    font-size: 20px; /* Taille de la police */
+}
+
+button {
+    background-color: white;
+    border-radius: 10px;
+    color: black;
+    font-family: 'Tahoma';
+    font-size: 1rem; /* Taille de police plus grande */
+    padding: 10px 40px ; /* Augmentation de la marge intérieure pour un bouton plus grand */
+
+    border: none; /* Ajout d'une bordure noire */
+    margin-bottom: 10px;
 }

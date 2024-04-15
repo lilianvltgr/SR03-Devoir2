@@ -1,25 +1,35 @@
 package model;
+import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.sql.Time;
 import java.util.Date;
-
+@Entity
+@Table(name = "sr03_chats")
 public class Chat {
-    int chatId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long chatId;
+    long creatorId;
     Date creationDate;
-    Time dureeValidite;
-    String titre;
+    Time duration;
+    String title;
     String description;
 
-    public Chat(int chatId, Date creationDate, Time dureeValidite, String titre, String description) {
+    public Chat(int chatId, Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
         this.chatId = chatId;
         this.creationDate = creationDate;
-        this.dureeValidite = dureeValidite;
-        this.titre = titre;
+        this.duration = dureeValidite;
+        this.title = titre;
         this.description = description;
+        this.creatorId = creatorId;
+
     }
+    public Chat() {}
     //region setters and getters
 
-    public int getChatId() {
+    public long getChatId() {
         return chatId;
     }
 
@@ -35,20 +45,20 @@ public class Chat {
         this.creationDate = creationDate;
     }
 
-    public Time getDureeValidite() {
-        return dureeValidite;
+    public Time getDuration() {
+        return duration;
     }
 
-    public void setDureeValidite(Time dureeValidite) {
-        this.dureeValidite = dureeValidite;
+    public void setDuration(Time dureeValidite) {
+        this.duration = dureeValidite;
     }
 
-    public String getTitre() {
-        return titre;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setTitle(String titre) {
+        this.title = titre;
     }
 
     public String getDescription() {

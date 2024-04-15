@@ -1,33 +1,40 @@
 package model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 /*
 Dans le contexte de JPA, une entité représente une table dans la base de données relationnelle.
 Chaque instance de cette classe représente une ligne dans cette table.
  */
 @Entity
+@Table(name = "sr03_users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int userId;
+    long userId;
     boolean admin;
-    boolean actif;
-    String nom;
-    String prenom;
+    boolean active;
+    @Column(name = "lastname")
+    @Size(min = 2)
+    @NotEmpty(message = "lastname obligatoire")
+    String lastname;
+    @Column(name = "firstname")
+    @Size(min = 2)
+    @NotEmpty(message = "firstname obligatoire")
+    String firstname;
+    @Column(name = "mail")
     String mail;
-    String passWord;
+    String password;
 
     public User(boolean admin, boolean actif, int userId, String nom, String prenom, String mail, String passWord) {
         this.admin = admin;
-        this.actif = actif;
+        this.active = actif;
         this.userId = userId;
-        this.nom = nom;
-        this.prenom = prenom;
+        this.lastname = nom;
+        this.firstname = prenom;
         this.mail = mail;
-        this.passWord = passWord;
+        this.password = passWord;
     }
 
     public User() {
@@ -43,15 +50,15 @@ public class User {
         this.admin = admin;
     }
 
-    public boolean isActif() {
-        return actif;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setActif(boolean actif) {
-        this.actif = actif;
+    public void setActive(boolean actif) {
+        this.active = actif;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -59,20 +66,20 @@ public class User {
         this.userId = userId;
     }
 
-    public String getNom() {
-        return nom;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setLastname(String nom) {
+        this.lastname = nom;
     }
 
-    public String getPrenom() {
-        return prenom;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    public void setFirstname(String prenom) {
+        this.firstname = prenom;
     }
 
     public String getMail() {
@@ -83,12 +90,12 @@ public class User {
         this.mail = mail;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String passWord) {
+        this.password = passWord;
     }
 
     //endregion
@@ -97,11 +104,11 @@ public class User {
     public static void main(String[] args) {
         User user = new User(true, true, 1, "Voltigeur", "Lilian", "lilian.voltigeur@etu.utc.fr", "testestest");
         System.out.println("Informations de l'utilisateur :");
-        System.out.println("Nom : " + user.getNom());
-        System.out.println("Prénom : " + user.getPrenom());
+        System.out.println("Nom : " + user.getLastname());
+        System.out.println("Prénom : " + user.getFirstname());
         System.out.println("Adresse e-mail : " + user.getMail());
         System.out.println("ID : " + user.getUserId());
-        System.out.println("Mot de passe : " + user.getPassWord());
+        System.out.println("Mot de passe : " + user.getPassword());
 
     }
 
