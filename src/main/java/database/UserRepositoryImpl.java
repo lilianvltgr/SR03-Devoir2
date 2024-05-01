@@ -6,7 +6,6 @@ import jakarta.persistence.Query;
 import model.Chat;
 import model.User;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -17,7 +16,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     @Override
     public List<User> findAdminOnly(){
         Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.admin = :admin", User.class).setParameter("admin", true);
-        // Execution de la requete (JPSQL)
+        // Execution de la requête (JPSQL)
         List<User> users = query.getResultList();
         return users;
     }
@@ -35,5 +34,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     public List<Chat> findChatsRelatedToUser(long userId){
         Query query = entityManager.createQuery("SELECT chat FROM ChatUser WHERE user = :userId", User.class).setParameter("userId", userId);
         return query.getResultList();
+    }
+    @Override
+    public boolean addUser(boolean admin, String lastname, String firstname, String mail, String password) {
+        User newUser = new User(admin,true, 10,lastname, firstname,mail,password);
+        entityManager.persist(newUser);
+        entityManager.getTransaction().commit();
+        return true;
     }
 }

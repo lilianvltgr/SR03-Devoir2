@@ -37,7 +37,6 @@ function validateForm() {
         return false; // Empêche l'envoi du formulaire si la validation échoue
 
     }
-
     return true; // Le formulaire est soumis si la validation réussit
 
 }

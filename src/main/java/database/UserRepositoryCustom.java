@@ -17,4 +17,5 @@ public interface UserRepositoryCustom {
     List<User> findUsersInChat(long chatId);
     List<Chat> findChatsRelatedToUser(long userId);
 
+    boolean addUser(boolean admin, String lastname, String firstname, String mail, String password);
 }
