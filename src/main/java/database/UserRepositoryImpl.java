@@ -42,4 +42,18 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         entityManager.getTransaction().commit();
         return true;
     }
+
+    @Override
+    public boolean modifyLastName(long id, String lastname) {
+        // Création et exécution de la requête UPDATE
+        int updatedEntities = entityManager.createQuery(
+                        "UPDATE User u SET u.lastname = :lastname WHERE u.id = :id")
+                .setParameter("lastname", lastname)
+                .executeUpdate();
+
+        // Vérifier si des entités ont été mises à jour
+        return updatedEntities > 0;
+    }
+
+
 }
