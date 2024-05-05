@@ -1,7 +1,7 @@
-package controller_web;
+package fr.utc.sr03.chat_admin.controller_web;
 
-import database.UserRepository;
-import model.User;
+import fr.utc.sr03.chat_admin.database.UserRepository;
+import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,10 +1,10 @@
-package database;
+package fr.utc.sr03.chat_admin.database;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
-import model.Chat;
-import model.User;
+import fr.utc.sr03.chat_admin.model.Chat;
+import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 

@@ -1,7 +1,7 @@
-package controller_web;
+package fr.utc.sr03.chat_admin.controller_web;
 
-import database.UserRepository;
-import model.User;
+import fr.utc.sr03.chat_admin.database.UserRepository;
+import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/UserControlleur")
 public class UserController {
     private final UserRepository userRepository;
 

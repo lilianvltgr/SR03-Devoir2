@@ -1,8 +1,7 @@
-package database;
+package fr.utc.sr03.chat_admin.database;
 
-import org.springframework.data.jpa.domain.JpaSort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import model.User;
+import fr.utc.sr03.chat_admin.model.User;
 
 import java.util.Optional;
 /*

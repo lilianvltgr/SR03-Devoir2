@@ -1,11 +1,9 @@
-package database;
+package fr.utc.sr03.chat_admin.database;
 
-import model.Chat;
-import model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import fr.utc.sr03.chat_admin.model.Chat;
+import fr.utc.sr03.chat_admin.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 /*
 Cette interface déclare les méthodes customisées pour la gestion de la bdd spécifique à ce projet

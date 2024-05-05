@@ -1,4 +1,4 @@
-package model;
+package fr.utc.sr03.chat_admin.model;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
