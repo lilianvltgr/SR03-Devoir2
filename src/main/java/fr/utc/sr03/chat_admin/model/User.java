@@ -27,10 +27,9 @@ public class User {
     String mail;
     String password;
 
-    public User(boolean admin, boolean actif, int userId, String lastname, String firstname, String mail, String password) {
+    public User(boolean admin, boolean actif, String lastname, String firstname, String mail, String password) {
         this.admin = admin;
         this.active = actif;
-        this.userId = userId;
         this.lastname = lastname;
         this.firstname = firstname;
         this.mail = mail;
@@ -102,7 +101,7 @@ public class User {
 
 
     public static void main(String[] args) {
-        User user = new User(true, true, 1, "Voltigeur", "Lilian", "lilian.voltigeur@etu.utc.fr", "testestest");
+        User user = new User(true, true,  "Voltigeur", "Lilian", "lilian.voltigeur@etu.utc.fr", "testestest");
         System.out.println("Informations de l'utilisateur :");
         System.out.println("Nom : " + user.getLastname());
         System.out.println("Prénom : " + user.getFirstname());

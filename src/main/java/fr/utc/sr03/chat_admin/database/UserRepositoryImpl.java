@@ -6,6 +6,8 @@ import jakarta.persistence.Query;
 import fr.utc.sr03.chat_admin.model.Chat;
 import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Repository
@@ -35,11 +37,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         Query query = entityManager.createQuery("SELECT chat FROM ChatUser WHERE user = :userId", User.class).setParameter("userId", userId);
         return query.getResultList();
     }
+    @Transactional
     @Override
     public boolean addUser(boolean admin, String lastname, String firstname, String mail, String password) {
-        User newUser = new User(admin,true, 10,lastname, firstname,mail,password);
+        User newUser = new User(admin,true,lastname, firstname,mail,password);
         entityManager.persist(newUser);
-        entityManager.getTransaction().commit();
         return true;
     }
 

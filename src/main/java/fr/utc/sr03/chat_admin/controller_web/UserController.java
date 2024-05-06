@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -36,13 +37,9 @@ public class UserController {
      */
 
     @GetMapping("getAllUser")
-    public boolean getUser() {
-        System.out.println("hello world");
-
-//        for (User user : userRepository.findAll()) {
-//            System.out.println(user.getFirstname());
-//        }
-        return true;
+    public List<User> getUser() {
+        List<User> users = userRepository.findAll();
+        return users;
     }
 
     @GetMapping("/{userId}")
