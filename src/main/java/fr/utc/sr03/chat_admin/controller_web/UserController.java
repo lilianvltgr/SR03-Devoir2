@@ -34,10 +34,23 @@ public class UserController {
     /*
     get one user with his id in parameter
      */
+
+    @GetMapping("getAllUser")
+    public boolean getUser() {
+        System.out.println("hello world");
+
+//        for (User user : userRepository.findAll()) {
+//            System.out.println(user.getFirstname());
+//        }
+        return true;
+    }
+
     @GetMapping("/{userId}")
-    public ResponseEntity<?> getUser(@PathVariable Integer userId) {
+    public ResponseEntity<?> getUser(@PathVariable Long userId) {
+        System.out.println("hello world");
         try {
             Optional<User> userOptional = userRepository.findByUserId(userId);
+
             if (userOptional.isPresent()) {
                 User user = userOptional.get();
                 return ResponseEntity.ok(user); // JSON format with status 200 OK
