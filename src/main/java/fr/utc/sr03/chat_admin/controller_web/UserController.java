@@ -66,19 +66,6 @@ public class UserController {
     Si on fait un formulaire de modification on pourrait n'appeler qu'une fois le controller
     sinon faire separement
      */
-    @PutMapping("/{userId}/lastname")
-    public ResponseEntity<String> modifyUserLastName(
-            @PathVariable("userId") long userId,
-            @RequestParam String lastname) {
-
-        boolean updated = userRepository.modifyLastName(userId, lastname);
-        if (updated) {
-            return ResponseEntity.ok("User's lastname updated successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User not found with id: " + userId);
-        }
-    }
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {

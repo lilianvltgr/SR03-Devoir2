@@ -18,6 +18,5 @@ public interface UserRepositoryCustom {
 
     boolean addUser(boolean admin, String lastname, String firstname, String mail, String password);
 
-    boolean modifyLastName(long id,String lastname);
 
 }

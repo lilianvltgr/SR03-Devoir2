@@ -15,7 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
 
     Integer deleteByUserId(long id);
 
-
     // ajouter toutes les méthodes nécessaires qui requièrent un échange avec la bdd
 
 }
