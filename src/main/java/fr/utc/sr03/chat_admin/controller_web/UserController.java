@@ -83,8 +83,8 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
-            boolean deleted = userRepository.deleteByUserId(userId);
-            if (deleted) {
+            Integer deleted = userRepository.deleteByUserId(userId);
+            if (deleted == 1) {
                 return ResponseEntity.ok("User deleted successfully");
             } else {
                 return ResponseEntity.notFound().build();
