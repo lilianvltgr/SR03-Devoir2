@@ -21,10 +21,9 @@ public class AdminController {
     private UserRepository userRepository;
 
     @GetMapping("users")
-    public String getUserList(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-
-        return "user_list";
+    public List<User> getAdmins() {
+        List<User> admins = userRepository.findAll();
+        return admins;
     }
+
 }

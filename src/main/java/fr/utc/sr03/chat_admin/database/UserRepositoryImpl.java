@@ -52,10 +52,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
                         "UPDATE User u SET u.lastname = :lastname WHERE u.id = :id")
                 .setParameter("lastname", lastname)
                 .executeUpdate();
-
         // Vérifier si des entités ont été mises à jour
         return updatedEntities > 0;
     }
-
-
 }

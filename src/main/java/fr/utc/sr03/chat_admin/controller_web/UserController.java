@@ -31,17 +31,19 @@ public class UserController {
             return new ResponseEntity<>("Failed to add user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     /*
     get one user with his id in parameter
      */
-
     @GetMapping("getAllUser")
     public List<User> getUser() {
         List<User> users = userRepository.findAll();
         return users;
     }
-
+    @GetMapping("getAdmins")
+    public List<User> getAdmins() {
+        List<User> admins = userRepository.findAdminOnly();
+        return admins;
+    }
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
         System.out.println("hello world");
@@ -58,23 +60,18 @@ public class UserController {
             return new ResponseEntity<>("Failed to get user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
     /*
     Reflechir a si on fait un controller de modification global,
     ou 1 pour chaque parametre d'un User
     Si on fait un formulaire de modification on pourrait n'appeler qu'une fois le controller
     sinon faire separement
-
      */
-
     @PutMapping("/{userId}/lastname")
     public ResponseEntity<String> modifyUserLastName(
             @PathVariable("userId") long userId,
             @RequestParam String lastname) {
 
         boolean updated = userRepository.modifyLastName(userId, lastname);
-
         if (updated) {
             return ResponseEntity.ok("User's lastname updated successfully");
         } else {
@@ -84,7 +81,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable("userId") long userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
             boolean deleted = userRepository.deleteByUserId(userId);
             if (deleted) {
@@ -96,7 +93,4 @@ public class UserController {
             return new ResponseEntity<>("Failed to delete user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
 }
