@@ -61,6 +61,13 @@ public class UserController {
         List<User> admins = userRepository.findAdminOnly();
         return admins;
     }
+    @GetMapping("/getAdminsTemplate")
+    public String getAdmins(Model model) {
+        List<User> admins = userRepository.findAdminOnly();
+        model.addAttribute("admins", admins);
+        return "templateTest";
+    }
+
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {
         try {

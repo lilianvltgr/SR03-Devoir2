@@ -18,12 +18,7 @@ public class AdminController {
 
     @GetMapping("/form")
     public String showForm(Model model) {
-
+        return "";
     }
 
-    @PostMapping("/submitAdminForm")
-    public String
-        // Process the form data (save to database, etc.)
-        return "redirect:/Accueil";
-    }
 }
