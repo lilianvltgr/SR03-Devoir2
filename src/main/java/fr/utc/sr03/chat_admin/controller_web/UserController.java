@@ -50,23 +50,7 @@ public class UserController {
         List<User> users = userRepository.findAll();
         return users;
     }
-    @GetMapping("/users") // This function should call the template userList but it does not :(
-    public String getUserList(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        return "userList";
-    }
-    @GetMapping("/getAdmins")
-    public List<User> getAdmins() {
-        List<User> admins = userRepository.findAdminOnly();
-        return admins;
-    }
-    @GetMapping("/getAdminsTemplate")
-    public String getAdmins(Model model) {
-        List<User> admins = userRepository.findAdminOnly();
-        model.addAttribute("admins", admins);
-        return "templateTest";
-    }
+
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {

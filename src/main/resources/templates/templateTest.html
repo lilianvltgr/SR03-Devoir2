@@ -2,9 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Admins</title>
 </head>
 <body>
-
+<h1>Liste des Administrateurs</h1>
+<div th:if="${admins.isEmpty()}">
+    <p>Aucun administrateur trouvé.</p>
+</div>
+<div th:unless="${admins.isEmpty()}">
+    <ul>
+        <li th:each="admin : ${admins}" th:text="${admin.username}">Nom de l'administrateur</li>
+    </ul>
+</div>
 </body>
 </html>
