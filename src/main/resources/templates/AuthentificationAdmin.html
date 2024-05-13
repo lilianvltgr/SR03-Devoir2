@@ -6,11 +6,10 @@
 </head>
 <body>
 <H1>Authentification Administrateur</H1>
-<form id="myForm" onsubmit="return validateForm()">
+<form id="myForm" action="/AdminController/isAdmin" onsubmit="return validateForm() " method="POST">
 
     <label for="email">Email :</label>
     <input type="email" id="email" name="email" required>
-
     <br>
 
     <label for="password">Mot de passe :</label>

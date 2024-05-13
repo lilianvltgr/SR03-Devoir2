@@ -11,7 +11,7 @@
 </div>
 <div th:unless="${admins.isEmpty()}">
     <ul>
-        <li th:each="admin : ${admins}" th:text="${admin.username}">Nom de l'administrateur</li>
+        <li th:each="admin : ${admins}" th:text="${admin.firstname}">Nom de l'administrateur</li>
     </ul>
 </div>
 </body>
