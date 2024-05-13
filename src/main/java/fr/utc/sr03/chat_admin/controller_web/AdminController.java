@@ -52,8 +52,8 @@ public String authentification(){
                 return "currentAdmin";
             }
         }
-        model.addAttribute("currentAdmin", "");
-        return "currentAdmin";
+        model.addAttribute("authFailed", true);
+        return "AuthentificationAdmin";
         //Connexion Invalide
     }
 
