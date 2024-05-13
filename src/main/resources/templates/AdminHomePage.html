@@ -1,10 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
+<script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+          "imports": {
+            "@material/web/": "https://esm.run/@material/web/"
+          }
+        }
+    </script>
+    <script type="module">
+        import '@material/web/all.js';
+        import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+        document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+    <title></title>
+<style>
+    body, html {
+        margin: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex; /* Enable Flexbox */
+        height: 100%; /* Full height of the viewport */
+    }
+    .sidebar {
+        width: 250px; /* Fixed width for the sidebar */
+        background-color: #f4f4f4; /* Light grey background */
+        padding: 20px; /* Padding around the text */
+    }
+    .content {
+        flex-grow: 1; /* Take up the remaining space */
+        padding: 20px; /* Padding around the content */
+        background-color: #fff; /* White background for content area */
+    }
+</style>
 </head>
 <body>
-
+<div th:insert="fragments :: sideMenuAdminFragment">
+<div class="content">
+</div>
+</div>
 </body>
 </html>

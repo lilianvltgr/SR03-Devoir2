@@ -48,6 +48,7 @@ public String authentification(){
             // filtre les valeurs qui commencent par `B`
             if (entry.getMail().equals(email) && (entry.getPassword().equals(password))){
                 model.addAttribute("currentAdmin", email);
+                //TODO ajouter la vérification de la désactivation temporaire du compte
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION );
                 return "currentAdmin";
             }
