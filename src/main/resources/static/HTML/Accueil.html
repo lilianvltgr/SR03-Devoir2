@@ -1,9 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="../CSS/Accueil.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
+<script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
-    <meta charset="UTF-8">
-    <title>Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+          "imports": {
+            "@material/web/": "https://esm.run/@material/web/"
+          }
+        }
+    </script>
+    <script type="module">
+        import '@material/web/all.js';
+        import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+        document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
+    <title></title>
 </head>
 <body>
 <header>
@@ -12,16 +26,16 @@
 
 <aside>
     <h1>Menu</h1>
-    <button> <a href="http://localhost:63342/chat_admin/static/HTML/Accueil.html"> Accueil </a> <br></button><br>
-    <button> <a href="http://localhost:63342/chat_admin/static/HTML/chat.html"> Chat </a> <br></button><br>
-    <button> <a href="http://localhost:63342/chat_admin/static/HTML/interfaceAdmin.html"> Admin </a> <br></button><br>
+    <md-filled-button > <a href="http://localhost:63342/chat_admin/static/HTML/Accueil.html"> Accueil  </a> <br></md-filled-button><br><br>
+    <md-filled-button> <a href="http://localhost:63342/chat_admin/static/HTML/chat.html"> Chat </a> <br></md-filled-button><br><br>
+    <md-filled-button> <a href="http://localhost:63342/chat_admin/static/HTML/interfaceAdmin.html"> Admin </a> <br></md-filled-button><br><br>
 
 </aside>
 <main>
 
 </main>
 <footer>
-    SR03 application chat Lilian et Zoé
+    SR03 application chat Lilian et Zoe
 </footer>
 
 </body>

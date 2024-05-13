@@ -53,3 +53,9 @@ button {
     border: none; /* Ajout d'une bordure noire */
     margin-bottom: 10px;
 }
+.md-filled-button {
+    --mdc-theme-primary: red;
+    --mdc-container-color: red;
+    color : red;
+    background-color: aqua;
+}

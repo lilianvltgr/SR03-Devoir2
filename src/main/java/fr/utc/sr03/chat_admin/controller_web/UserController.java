@@ -47,10 +47,8 @@ public class UserController {
      */
     @GetMapping("/getAllUsers")
     public List<User> getUser() {
-        List<User> users = userRepository.findAll();
-        return users;
+        return userRepository.findAll();
     }
-
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Long userId) {

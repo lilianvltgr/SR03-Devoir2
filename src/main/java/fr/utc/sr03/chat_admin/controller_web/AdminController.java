@@ -42,10 +42,5 @@ public class AdminController {
         model.addAttribute("admins", admins);
         return "templateTest";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
     }
-    @GetMapping("/test")
-    public String testTemplate(Model model) {
-        model.addAttribute("message", "Hello World");
-        return "test";  // Assurez-vous que vous avez un fichier test.html dans src/main/resources/templates
-    }
 
 }

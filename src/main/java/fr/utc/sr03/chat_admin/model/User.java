@@ -13,7 +13,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long userId;
+    @Column(name = "admin")
     boolean admin;
+    @Column(name = "active")
     boolean active;
     @Column(name = "lastname")
     @Size(min = 2)

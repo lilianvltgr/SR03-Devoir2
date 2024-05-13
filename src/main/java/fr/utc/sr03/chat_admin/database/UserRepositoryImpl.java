@@ -19,8 +19,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
     public List<User> findAdminOnly(){
         Query query = entityManager.createQuery("SELECT u FROM User u WHERE u.admin = :admin", User.class).setParameter("admin", true);
         // Execution de la requête (JPSQL)
-        List<User> users = query.getResultList();
-        return users;
+        return query.getResultList();
     }
     @Override
     public List<Chat> findChatsCreatedBy(long userId){
