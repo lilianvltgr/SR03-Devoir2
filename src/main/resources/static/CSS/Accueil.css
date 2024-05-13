@@ -2,60 +2,6 @@ body {
     font-family: 'Tahoma';
 }
 
-
-footer {
-    background-color: cadetblue; /* Couleur de fond */
-    color: antiquewhite; /* Couleur du texte */
-    font-size: 2rem;
-    padding: 10px; /* Marge intérieure */
-    text-align: center; /* Centrage du texte */
-    position: fixed; /* Position fixe au bas de la fenêtre */
-    left: 0;
-    bottom: 0;
-    width: 100%; /* Largeur de 100% */
-}
-
-aside {
-    background-color: antiquewhite; /* Couleur de fond */
-    color: cadetblue; /* Couleur du texte */
-    font-size: 1rem; /* Taille de police ajustée */
-    padding: 10px; /* Marge intérieure */
-    text-align: center; /* Centrage du texte */
-    position: fixed; /* Position fixe */
-    left: 0; /* Collé à gauche */
-    top: 70px; /* Ajustement de la position en tenant compte de la hauteur du header */
-    bottom: 0; /* Aligné en bas */
-    width: 200px; /* Largeur fixe */
-    overflow-y: auto; /* Défilement vertical si le contenu dépasse */
-}
-
-header {
-    background-color: cadetblue; /* Couleur de fond */
-    color: antiquewhite; /* Couleur du texte */
-    font-size: 3rem;
-    padding: 15px; /* Marge intérieure */
-    text-align: center; /* Centrage du texte */
-    position: fixed; /* Position fixe au sommet de la fenêtre */
-    left: 0;
-    top: 0;
-    width: 100%; /* Largeur de 100% */
-    z-index: 999; /* Assure que le header est en avant-plan */
-}
-
 button {
     background-color: white;
-    border-radius: 10px;
-    color: black;
-    font-family: 'Tahoma';
-    font-size: 1rem; /* Taille de police plus grande */
-    padding: 10px 40px ; /* Augmentation de la marge intérieure pour un bouton plus grand */
-
-    border: none; /* Ajout d'une bordure noire */
-    margin-bottom: 10px;
-}
-.md-filled-button {
-    --mdc-theme-primary: red;
-    --mdc-container-color: red;
-    color : red;
-    background-color: aqua;
 }

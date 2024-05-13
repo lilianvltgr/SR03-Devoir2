@@ -5,6 +5,15 @@
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Ajout des styles Material Components Web -->
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- Ajout des scripts Material Components Web -->
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+
     <script type="importmap">
         {
           "imports": {
@@ -17,26 +26,61 @@
         import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
         document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
     </script>
+    <script>
+        window.mdc.autoInit();
+    </script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: white;
+        }
+
+        .button-container {
+            background-color: #F4F4F4;
+            padding: 60px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px; /* Espaces entre les boutons */
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+
+        h1 {
+            margin-bottom: 40px; /* Espace entre le titre et le bloc de boutons */
+        }
+    </style>
     <title></title>
 </head>
+
 <body>
-<header>
-    Accueil
-</header>
+<h1>Chat-App</h1>
 
-<aside>
-    <h1>Menu</h1>
-    <md-filled-button > <a href="http://localhost:63342/chat_admin/static/HTML/Accueil.html"> Accueil  </a> <br></md-filled-button><br><br>
-    <md-filled-button> <a href="http://localhost:63342/chat_admin/static/HTML/chat.html"> Chat </a> <br></md-filled-button><br><br>
-    <md-filled-button> <a href="http://localhost:63342/chat_admin/static/HTML/interfaceAdmin.html"> Admin </a> <br></md-filled-button><br><br>
+<div class="button-container">
+    <!-- Interface Administrateur -->
+    <md-fab label="Espace Administrateur">
+    <md-icon slot="icon">admin_panel_settings</md-icon>
+    </md-fab>
 
-</aside>
+    <md-fab label="Chats">
+    <md-icon slot="icon">Chat</md-icon>
+    </md-fab>
+
+    <md-fab label="Deconnexion">
+    <md-icon slot="icon">cloud_off</md-icon>
+    </md-fab>
+</div>
+
 <main>
 
 </main>
-<footer>
-    SR03 application chat Lilian et Zoe
-</footer>
+
 
 </body>
 </html>
