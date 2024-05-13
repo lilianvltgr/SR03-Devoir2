@@ -5,6 +5,7 @@ import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 /*
 Classe repository qui contient toutes les méthodes propres à la base de données choisies

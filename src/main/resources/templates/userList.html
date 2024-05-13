@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -28,10 +28,6 @@
     </div>
 </nav>
 <div class="content">
-    <aside>
-        <div>Bob</div>
-        <div>Admin</div>
-    </aside>
     <main>
         <table>
             <thead>
@@ -42,8 +38,8 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td><span th:text="${user.lastName}"></span></td>
-                <td><span th:text="${user.firstName}"></span></td>
+                <td><span th:text="${user.getLastname()}"></span></td>
+                <td><span th:text="${user.getFirstname()}"></span></td>
             </tr>
             </tbody>
         </table>

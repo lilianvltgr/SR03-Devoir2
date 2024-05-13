@@ -21,24 +21,31 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/form")
-    public String showForm(Model model) {
-        return "";
-    }
-
-    @GetMapping("/users") // This function should call the template userList but it does not :(
+    @GetMapping("/users")
     public String getUserList(Model model) {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "userList";
+    } @GetMapping("/inactiveUsers")
+    public String getinactiveUsers(Model model) {
+        List<User> allUsers = userRepository.findAll();
+        List<User> inactiveUsers = userRepository.findAll();
+        for (User entry: allUsers){
+            if(!(entry.isActive())){
+                inactiveUsers.add(entry);
+
+            }
+        }
+        model.addAttribute("users", inactiveUsers);
+        return "userList";
     }
 
-@GetMapping("/authentification")
-public String authentification(){
-        return "AuthentificationAdmin";
-}
+    @GetMapping("/authentification")
+    public String authentification(){
+            return "AuthentificationAdmin";
+    }
     @PostMapping("/isAdmin")
-    public String isAdmin(Model model, WebRequest request,
+        public String isAdmin(Model model, WebRequest request,
                           @RequestParam("password") String password,
                           @RequestParam("email") String email){
         List<User> users = userRepository.findAll();
@@ -69,5 +76,4 @@ public String authentification(){
         model.addAttribute("admins", admins);
         return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
     }
-
 }

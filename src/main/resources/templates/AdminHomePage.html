@@ -40,7 +40,24 @@
 </style>
 </head>
 <body>
-<div th:insert="fragments :: sideMenuAdminFragment">
+<div class="container">
+    <div class="sidebar">
+        <h2>Sidebar Menu</h2>
+        <md-fab label="Espace Administrateur" id="admin" ></md-fab><br><br>
+        <md-fab label="Utilisateurs desactives" id="desactives" ></md-fab><br><br>
+        <md-fab label="Utilisateurs" id="utilisateurs" ></md-fab><br><br>
+        <script>
+            document.getElementById('admin').addEventListener('click', function() {
+                window.location.href = 'https://www.google.com';
+            });
+            document.getElementById('desactives').addEventListener('click', function() {
+                window.location.href = 'http://localhost:8080/AdminController/inactiveUsers';
+            });
+            document.getElementById('utilisateurs').addEventListener('click', function() {
+                window.location.href = 'http://localhost:8080/AdminController/users';
+            });
+        </script>
+    </div>
 <div class="content">
 </div>
 </div>
