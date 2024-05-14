@@ -4,6 +4,8 @@ import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -26,38 +28,62 @@ public class AdminController {
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "userList";
-    } @GetMapping("/inactiveUsers")
+    }
+
+    @GetMapping("/inactiveUsers")
     public String getinactiveUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
         List<User> inactiveUsers = userRepository.findAll();
-        for (User entry: allUsers){
-            if(!(entry.isActive())){
+        for (User entry : allUsers) {
+            if (!(entry.isActive())) {
                 inactiveUsers.add(entry);
-
             }
         }
         model.addAttribute("users", inactiveUsers);
         return "userList";
     }
 
-    @GetMapping("/authentification")
-    public String authentification(){
-            return "AuthentificationAdmin";
+    @GetMapping("/getUserForm")
+    public String getUserForm() {
+        return "nouvelUtilisateur";
     }
-    @PostMapping("/isAdmin")
-        public String isAdmin(Model model, WebRequest request,
+
+    @GetMapping("/authentification")
+    public String authentification() {
+        return "AuthentificationAdmin";
+    }
+
+    @GetMapping("/adminHomePage")
+    public String adminHomePage() {
+        return "AdminHomePage";
+    }
+
+    @PostMapping("/addUser")
+    public String addUser(Model model,
                           @RequestParam("password") String password,
-                          @RequestParam("email") String email){
+                          @RequestParam("email") String email,
+                          @RequestParam("firstname") String firstname,
+                          @RequestParam("lastname") String lastname,
+                          @RequestParam("admin") boolean admin) {
+
+        //addUser pourrait être supprimé pour être remplacé par saveAndFlush
+        userRepository.addUser(admin, lastname, firstname, email, password);
+        return "AdminHomePage";
+    }
+
+    @PostMapping("/isAdmin")
+    public String isAdmin(Model model, WebRequest request,
+                          @RequestParam("password") String password,
+                          @RequestParam("email") String email) {
         List<User> users = userRepository.findAll();
         List<User> filteredUsers;
-        for (User entry: users)
-        {
+        for (User entry : users) {
             // filtre les valeurs qui commencent par `B`
-            if (entry.getMail().equals(email) && (entry.getPassword().equals(password))){
+            if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
                 model.addAttribute("currentAdmin", email);
                 //TODO ajouter la vérification de la désactivation temporaire du compte
-                request.setAttribute("email", email, WebRequest.SCOPE_SESSION );
-                return "currentAdmin";
+                request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
+                return "Accueil";
             }
         }
         model.addAttribute("authFailed", true);
@@ -70,6 +96,7 @@ public class AdminController {
         List<User> admins = userRepository.findAdminOnly();
         return admins;
     }
+
     @GetMapping("/getAdminsTemplate")
     public String getAdmins(Model model) {
         List<User> admins = userRepository.findAdminOnly();

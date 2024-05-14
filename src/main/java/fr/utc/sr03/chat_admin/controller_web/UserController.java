@@ -20,6 +20,7 @@ public class UserController {
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
     /*
     add one user to the database
      */
@@ -33,6 +34,7 @@ public class UserController {
             return new ResponseEntity<>("Failed to add user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @PostMapping("/userUpdate")
     public ResponseEntity<String> updateUser(@RequestBody User newUser) {
         try {
@@ -42,6 +44,7 @@ public class UserController {
             return new ResponseEntity<>("Failed to add user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     /*
     get one user with his id in parameter
      */

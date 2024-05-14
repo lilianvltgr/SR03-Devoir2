@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<link rel="stylesheet" href="http://localhost:63342/chat_admin/src/main/resources/static/CSS/adminHomePage.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
@@ -17,47 +19,10 @@
         document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
     </script>
     <title></title>
-<style>
-    body, html {
-        margin: 0;
-        height: 100%;
-        font-family: Arial, sans-serif;
-    }
-    .container {
-        display: flex; /* Enable Flexbox */
-        height: 100%; /* Full height of the viewport */
-    }
-    .sidebar {
-        width: 250px; /* Fixed width for the sidebar */
-        background-color: #f4f4f4; /* Light grey background */
-        padding: 20px; /* Padding around the text */
-    }
-    .content {
-        flex-grow: 1; /* Take up the remaining space */
-        padding: 20px; /* Padding around the content */
-        background-color: #fff; /* White background for content area */
-    }
-</style>
 </head>
 <body>
 <div class="container">
-    <div class="sidebar">
-        <h2>Sidebar Menu</h2>
-        <md-fab label="Espace Administrateur" id="admin" ></md-fab><br><br>
-        <md-fab label="Utilisateurs desactives" id="desactives" ></md-fab><br><br>
-        <md-fab label="Utilisateurs" id="utilisateurs" ></md-fab><br><br>
-        <script>
-            document.getElementById('admin').addEventListener('click', function() {
-                window.location.href = 'https://www.google.com';
-            });
-            document.getElementById('desactives').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/inactiveUsers';
-            });
-            document.getElementById('utilisateurs').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/users';
-            });
-        </script>
-    </div>
+    <div th:replace="fragments :: sideBar"></div>
 <div class="content">
 </div>
 </div>

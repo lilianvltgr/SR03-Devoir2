@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="../CSS/Accueil.css">
+<link rel="stylesheet" href="../static/CSS/Accueil.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
@@ -64,17 +64,29 @@
 
 <div class="button-container">
     <!-- Interface Administrateur -->
-    <md-fab label="Espace Administrateur">
+    <md-fab label="Espace Administrateur" id="Espace Administrateur">
     <md-icon slot="icon">admin_panel_settings</md-icon>
     </md-fab>
 
-    <md-fab label="Chats">
+    <md-fab label="Chats" id="Chats">
     <md-icon slot="icon">Chat</md-icon>
     </md-fab>
 
-    <md-fab label="Deconnexion">
+    <md-fab label="Deconnexion" id="Deconnexion">
     <md-icon slot="icon">cloud_off</md-icon>
     </md-fab>
+
+    <script>
+        document.getElementById('Espace Administrateur').addEventListener('click', function() {
+            window.location.href = 'http://localhost:8080/AdminController/adminHomePage';
+        });
+        document.getElementById('Chats').addEventListener('click', function() {
+            window.location.href = 'http://localhost:8080/ChatsController';
+        });
+        document.getElementById('Deconnexion').addEventListener('click', function() {
+            window.location.href = 'http://localhost:8080/AdminController/users';
+        });
+    </script>
 </div>
 
 <main>
