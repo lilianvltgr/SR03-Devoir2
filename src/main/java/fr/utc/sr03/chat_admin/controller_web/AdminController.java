@@ -2,15 +2,13 @@ package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +21,7 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
+
     @GetMapping("/users")
     public String getUserList(Model model) {
         List<User> users = userRepository.findAll();
@@ -31,13 +30,12 @@ public class AdminController {
     }
 
     @GetMapping("/inactiveUsers")
-    public String getinactiveUsers(Model model) {
+    public String getInactiveUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
-        List<User> inactiveUsers = userRepository.findAll();
+        List<User> inactiveUsers = new ArrayList<>();
         for (User entry : allUsers) {
-            if (!(entry.isActive())) {
-                inactiveUsers.add(entry);
-            }
+            if (!entry.isActive()) {
+                inactiveUsers.add(entry);}
         }
         model.addAttribute("users", inactiveUsers);
         return "userList";
@@ -45,7 +43,10 @@ public class AdminController {
 
     @GetMapping("/getUserForm")
     public String getUserForm() {
-        return "nouvelUtilisateur";
+        return "newUserForm";
+    } @GetMapping("")
+    public String goHome() {
+        return "homePage";
     }
 
     @GetMapping("/authentification")
@@ -68,7 +69,8 @@ public class AdminController {
 
         //addUser pourrait être supprimé pour être remplacé par saveAndFlush
         userRepository.addUser(admin, lastname, firstname, email, password);
-        return "AdminHomePage";
+        model.addAttribute("lastUserAdded", lastname+" "+firstname);
+        return "newUserForm";
     }
 
     @PostMapping("/isAdmin")
@@ -83,7 +85,7 @@ public class AdminController {
                 model.addAttribute("currentAdmin", email);
                 //TODO ajouter la vérification de la désactivation temporaire du compte
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
-                return "Accueil";
+                return "homePage";
             }
         }
         model.addAttribute("authFailed", true);
