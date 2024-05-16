@@ -4,6 +4,7 @@ import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -125,13 +126,23 @@ public class AdminController {
 
     @DeleteMapping("/delete/{userId}")
     public String deleteUser(Model model, @PathVariable Long userId) {
-        System.out.println("Delete");
         Integer deleted = userRepository.deleteByUserId(userId);
         return getUserList(model);
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestBody User user, Model model) {
+    public String updateUser(@RequestParam("password") String password,
+                             @RequestParam("email") String email,
+                             @RequestParam("firstname") String firstname,
+                             @RequestParam("lastname") String lastname,
+                             @Param("admin") boolean admin,
+                             @Param("active") boolean active,
+                             @RequestParam("userId") int userId,
+                             Model model) {
+        System.out.println(admin);
+
+        User user = new User(admin, active, lastname, firstname, email, password);
+        user.setUserId(userId);
         userRepository.saveAndFlush(user);
         model.addAttribute("userInfos", user);
         model.addAttribute("userUpdated", true);
