@@ -13,6 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/AdminController")
@@ -32,13 +33,24 @@ public class AdminController {
         return "userList";
     }
 
+    @GetMapping("/userInfos/{userId}")
+    public String getUserInfos(Model model, @PathVariable Long userId) {
+        Optional<User> userOptional = userRepository.findByUserId(userId);
+        if (userOptional.isPresent()) {
+            User userInfos = userOptional.get();
+            model.addAttribute("userInfos", userInfos);
+        }
+        return "userInfos";
+    }
+
     @GetMapping("/inactiveUsers")
     public String getInactiveUsers(Model model) {
         List<User> allUsers = userRepository.findAll();
         List<User> inactiveUsers = new ArrayList<>();
         for (User entry : allUsers) {
             if (!entry.isActive()) {
-                inactiveUsers.add(entry);}
+                inactiveUsers.add(entry);
+            }
         }
         model.addAttribute("users", inactiveUsers);
         return "userList";
@@ -47,7 +59,9 @@ public class AdminController {
     @GetMapping("/getUserForm")
     public String getUserForm() {
         return "newUserForm";
-    } @GetMapping("")
+    }
+
+    @GetMapping("")
     public String goHome() {
         return "homePage";
     }
@@ -72,7 +86,7 @@ public class AdminController {
 
         //addUser pourrait être supprimé pour être remplacé par saveAndFlush
         userRepository.addUser(admin, lastname, firstname, email, password);
-        model.addAttribute("lastUserAdded", lastname+" "+firstname);
+        model.addAttribute("lastUserAdded", lastname + " " + firstname);
         return "newUserForm";
     }
 
@@ -112,7 +126,15 @@ public class AdminController {
     @DeleteMapping("/delete/{userId}")
     public String deleteUser(Model model, @PathVariable Long userId) {
         System.out.println("Delete");
-            Integer deleted = userRepository.deleteByUserId(userId);
-            return getUserList(model);
+        Integer deleted = userRepository.deleteByUserId(userId);
+        return getUserList(model);
+    }
+
+    @PostMapping("/update")
+    public String updateUser(@RequestBody User user, Model model) {
+        userRepository.saveAndFlush(user);
+        model.addAttribute("userInfos", user);
+        model.addAttribute("userUpdated", true);
+        return "userInfos";
     }
 }
