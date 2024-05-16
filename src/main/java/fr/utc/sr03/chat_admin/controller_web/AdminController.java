@@ -2,7 +2,10 @@ package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -104,5 +107,12 @@ public class AdminController {
         List<User> admins = userRepository.findAdminOnly();
         model.addAttribute("admins", admins);
         return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public String deleteUser(Model model, @PathVariable Long userId) {
+        System.out.println("Delete");
+            Integer deleted = userRepository.deleteByUserId(userId);
+            return getUserList(model);
     }
 }

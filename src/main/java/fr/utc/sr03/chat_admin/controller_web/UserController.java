@@ -2,6 +2,7 @@ package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +77,7 @@ public class UserController {
      */
 
     @DeleteMapping("/{userId}")
+    @Transactional
     public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
         try {
             Integer deleted = userRepository.deleteByUserId(userId);

@@ -13,7 +13,7 @@ Classe repository qui contient toutes les méthodes propres à la base de donné
 // Utilisez l'interface, pas la classe
 public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
     Optional<User> findByUserId(long id);
-
+    @Transactional
     Integer deleteByUserId(long id);
 
     // ajouter toutes les méthodes nécessaires qui requièrent un échange avec la bdd

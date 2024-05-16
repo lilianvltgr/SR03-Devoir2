@@ -27,14 +27,32 @@
 </head>
 
 <body>
+<script>
+    function deleteUser(ele) {
+        const userId = ele.id
+        fetch(`http://localhost:8080/AdminController/delete/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+    // document.getElementById('update').addEventListener('click', function() {
+    //     window.location.href = 'http://localhost:8080/AdminController/'+ userId; //TODO
+    // });
+</script>
 <div class="container">
     <div class="sidebar">
         <div th:replace="fragments :: sideBar"></div>
     </div>
     <div class="content">
         <div th:each="user : ${users}">
+            <span><md-fab label="Supprimer" th:id="${user.getUserId()}" onclick="deleteUser(this)" ></md-fab> </span>
+            <span><md-fab label="Modifier" id="update" ></md-fab> </span>
+
             <span th:text="${user.getLastname()}"></span>
             <span th:text="${user.getFirstname()}"></span>
+            <span th:text="${user.getMail()}"></span>
         </div>
     </div>
 </div>
