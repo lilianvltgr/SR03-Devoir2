@@ -72,80 +72,96 @@ public class AdminController {
         return "AuthentificationAdmin";
     }
 
-    @GetMapping("/adminHomePage")
-    public String adminHomePage() {
-        return "AdminHomePage";
+    @GetMapping("/deconnexion")
+    public String deconnexion(WebRequest request){
+        request.removeAttribute("email", WebRequest.SCOPE_SESSION);
+        request.removeAttribute("isAdmin", WebRequest.SCOPE_SESSION);
+        return "redirect:/AdminController";
     }
 
-    @PostMapping("/addUser")
-    public String addUser(Model model,
-                          @RequestParam("password") String password,
-                          @RequestParam("email") String email,
-                          @RequestParam("firstname") String firstname,
-                          @RequestParam("lastname") String lastname,
-                          @RequestParam("admin") boolean admin) {
-
-        //addUser pourrait être supprimé pour être remplacé par saveAndFlush
-        userRepository.addUser(admin, lastname, firstname, email, password);
-        model.addAttribute("lastUserAdded", lastname + " " + firstname);
-        return "newUserForm";
-    }
-
-    @PostMapping("/isAdmin")
-    public String isAdmin(Model model, WebRequest request,
-                          @RequestParam("password") String password,
-                          @RequestParam("email") String email) {
-        List<User> users = userRepository.findAll();
-        List<User> filteredUsers;
-        for (User entry : users) {
-            // filtre les valeurs qui commencent par `B`
-            if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
-                model.addAttribute("currentAdmin", email);
-                //TODO ajouter la vérification de la désactivation temporaire du compte
-                request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
-                return "homePage";
-            }
+    @GetMapping("/redirectAuth")
+    public String redirectAuth(WebRequest request) {
+        Object isAdmin = request.getAttribute("isAdmin", WebRequest.SCOPE_SESSION);
+        if (isAdmin != null && isAdmin.toString().equals("true")) {
+            return "redirect:/AdminController/adminHomePage";
         }
-        model.addAttribute("authFailed", true);
-        return "AuthentificationAdmin";
-        //Connexion Invalide
+        return "redirect:/AdminController/authentification";
     }
+        @GetMapping("/adminHomePage")
+        public String adminHomePage(){
 
-    @GetMapping("/getAdmins")
-    public List<User> getAdmins() {
-        List<User> admins = userRepository.findAdminOnly();
-        return admins;
+            return "AdminHomePage";
+        }
+
+        @PostMapping("/addUser")
+        public String addUser (Model model,
+                @RequestParam("password") String password,
+                @RequestParam("email") String email,
+                @RequestParam("firstname") String firstname,
+                @RequestParam("lastname") String lastname,
+        @Param("admin") boolean admin){
+
+            //addUser pourrait être supprimé pour être remplacé par saveAndFlush
+            userRepository.addUser(admin, lastname, firstname, email, password);
+            model.addAttribute("lastUserAdded", lastname + " " + firstname);
+            return "newUserForm";
+        }
+
+        @PostMapping("/isAdmin")
+        public String isAdmin (Model model, WebRequest request,
+                @RequestParam("password") String password,
+                @RequestParam("email") String email){
+            List<User> users = userRepository.findAll();
+            List<User> filteredUsers;
+            for (User entry : users) {
+                if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
+                    model.addAttribute("currentAdmin", email);
+                    //TODO ajouter la vérification de la désactivation temporaire du compte
+                    request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
+                    request.setAttribute("isAdmin", true, WebRequest.SCOPE_SESSION);
+                    return "homePage";
+                }
+            }
+            model.addAttribute("authFailed", true);
+            return "AuthentificationAdmin";
+            //Connexion Invalide
+        }
+
+        @GetMapping("/getAdmins")
+        public List<User> getAdmins () {
+            List<User> admins = userRepository.findAdminOnly();
+            return admins;
+        }
+
+        @GetMapping("/getAdminsTemplate")
+        public String getAdmins (Model model){
+            List<User> admins = userRepository.findAdminOnly();
+            model.addAttribute("admins", admins);
+            return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
+        }
+
+        @DeleteMapping("/delete/{userId}")
+        public String deleteUser (Model model, @PathVariable Long userId){
+            Integer deleted = userRepository.deleteByUserId(userId);
+            return getUserList(model);
+        }
+
+        @PostMapping("/update")
+        public String updateUser (@RequestParam("password") String password,
+                @RequestParam("email") String email,
+                @RequestParam("firstname") String firstname,
+                @RequestParam("lastname") String lastname,
+        @Param("admin") boolean admin,
+        @Param("active") boolean active,
+        @RequestParam("userId") int userId,
+        Model model){
+            System.out.println(admin);
+
+            User user = new User(admin, active, lastname, firstname, email, password);
+            user.setUserId(userId);
+            userRepository.saveAndFlush(user);
+            model.addAttribute("userInfos", user);
+            model.addAttribute("userUpdated", true);
+            return "userInfos";
+        }
     }
-
-    @GetMapping("/getAdminsTemplate")
-    public String getAdmins(Model model) {
-        List<User> admins = userRepository.findAdminOnly();
-        model.addAttribute("admins", admins);
-        return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
-    }
-
-    @DeleteMapping("/delete/{userId}")
-    public String deleteUser(Model model, @PathVariable Long userId) {
-        Integer deleted = userRepository.deleteByUserId(userId);
-        return getUserList(model);
-    }
-
-    @PostMapping("/update")
-    public String updateUser(@RequestParam("password") String password,
-                             @RequestParam("email") String email,
-                             @RequestParam("firstname") String firstname,
-                             @RequestParam("lastname") String lastname,
-                             @Param("admin") boolean admin,
-                             @Param("active") boolean active,
-                             @RequestParam("userId") int userId,
-                             Model model) {
-        System.out.println(admin);
-
-        User user = new User(admin, active, lastname, firstname, email, password);
-        user.setUserId(userId);
-        userRepository.saveAndFlush(user);
-        model.addAttribute("userInfos", user);
-        model.addAttribute("userUpdated", true);
-        return "userInfos";
-    }
-}
