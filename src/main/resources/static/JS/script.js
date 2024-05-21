@@ -1,6 +1,6 @@
 function validateNewUserForm() {
-    var firstName = document.getElementById('prenom').value;
-    var lastName = document.getElementById('nom').value;
+    var firstName = document.getElementById('firstname').value;
+    var lastName = document.getElementById('lastname').value;
     var password = document.getElementById('password').value;
     var regexLettersOnly = /^[a-zA-ZÀ-ÿ]+$/; // Autorise les lettres sans accent et avec accent
     var regexUppercase = /[A-Z]/; // Regex pour vérifier la présence de majuscules
