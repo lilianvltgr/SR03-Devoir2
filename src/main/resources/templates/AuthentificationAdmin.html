@@ -23,7 +23,12 @@
     <br>
     <button type="submit">Se connecter</button>
 </form>
-<button> <a href="https://google.com"> Mot de passe oublié </a></button> <!--TODO -->
+<button> <a href="https://google.com"> Mot de passe oublié </a></button>
+<div id="resetPasswordForm" style="display:none">
+    <input type="email" id="resetEmail" name="resetEmail" placeholder="Entrez votre email" required>
+    <button type="submit" onclick="sendResetLink()">Envoyer le lien</button>
+</div>
+<!--TODO -->
 <div th:if="${authFailed}" style="color:red">
     Authentification failed, please try again.
 </div>

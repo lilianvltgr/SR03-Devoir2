@@ -5,6 +5,7 @@ import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -165,4 +166,8 @@ public class AdminController {
             return "userInfos";
         }
 
+     // TO DO controleur
+
+
     }
+
