@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="../static/CSS/homePage.css">
+<link rel="stylesheet" href="/CSS/homePage.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
@@ -9,26 +9,10 @@
     <!-- Ajout des styles Material Components Web -->
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <!-- Ajout des scripts Material Components Web -->
     <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-
-    <script type="importmap">
-        {
-          "imports": {
-            "@material/web/": "https://esm.run/@material/web/"
-          }
-        }
-    </script>
-    <script type="module">
-        import '@material/web/all.js';
-        import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
-        document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
-    </script>
-    <script>
-        window.mdc.autoInit();
-    </script>
+    <link rel="stylesheet" href="/CSS/homePage.css">
     <style>
         body {
             display: flex;
@@ -50,12 +34,24 @@
             flex-direction: column;
             align-items: flex-start;
         }
-
-
         h1 {
             margin-bottom: 40px; /* Espace entre le titre et le bloc de boutons */
         }
+
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="importmap">
+        {
+          "imports": {
+            "@material/web/": "https://esm.run/@material/web/"
+          }
+        }
+    </script>
+    <script type="module">
+        import '@material/web/all.js';
+        import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+        document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
+    </script>
     <title></title>
 </head>
 

@@ -1,7 +1,23 @@
 body {
-    font-family: 'Tahoma';
-}
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     height: 100vh;
+     margin: 0;
+     background-color: white;
+ }
 
-button {
-    background-color: white;
+.button-container {
+    background-color: #F4F4F4;
+    padding: 60px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px; /* Espaces entre les boutons */
+    flex-direction: column;
+    align-items: flex-start;
+}
+h1 {
+    margin-bottom: 40px; /* Espace entre le titre et le bloc de boutons */
 }
