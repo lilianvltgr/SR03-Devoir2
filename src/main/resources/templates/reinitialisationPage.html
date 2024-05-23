@@ -18,7 +18,7 @@
 </div>
 
 <!-- Formulaire de mise à jour du mot de passe -->
-<form th:action="@{/updatePassword}" method="post">
+<form action="/AdminController/updatePassword" method="post">
     <input type="email" name="mail" placeholder="Entrez votre email" required>
     <input type="password" name="newPassword" placeholder="Nouveau mot de passe" required>
     <button type="submit">Mettre à jour le mot de passe</button>

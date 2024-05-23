@@ -1,43 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<style>
-    * {
-        box-sizing: border-box;
-    }
 
-    #myInput {
-        background-image: url('/css/searchicon.png');
-        background-position: 10px 12px;
-        background-repeat: no-repeat;
-        width: 100%;
-        font-size: 16px;
-        padding: 12px 20px 12px 40px;
-        border: 1px solid #ddd;
-        margin-bottom: 12px;
-    }
-
-    #myUL {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    #myUL li {
-        border: 1px solid #ddd;
-        margin-top: -1px; /* Prevent double borders */
-        background-color: #f6f6f6;
-        padding: 12px;
-        text-decoration: none;
-        font-size: 18px;
-        color: black;
-        display: block
-    }
-
-    #myUL li:hover:not(.header) {
-        background-color: #eee;
-    }
-</style>
 <link rel="stylesheet" href="http://localhost:63342/chat_admin/src/main/resources/static/CSS/adminHomePage.css">
+<link rel="stylesheet" href="/CSS/userList.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 <head>
@@ -111,7 +76,6 @@
         <div th:replace="fragments :: sideBar"></div>
     </div>
     <div class="content">
-
         <input type="text" id="myInput" onkeyup="search()" placeholder="Search for names.."><br>
         <ul id="myUL">
             <li th:each="user : ${users}"><span><md-fab label="Supprimer" id="delete" th:userId="${user.getUserId()}" onclick="deleteUser(this)" ></md-fab> </span>
@@ -121,6 +85,12 @@
             <span th:text="${user.getFirstname()}"></span>
             <span th:text="${user.getMail()}"></span></li>
         </ul>
+
+        <div id="pagination">
+            <a th:unless="${current_page == 0 }" th:href="@{/AdminController/usersPage(page=${current_page - 1})}">Previous</a>
+            <span th:text="${current_page}"></span>
+            <a th:unless="${current_page == total_pages - 1}" th:href="@{/AdminController/usersPage(page=${current_page + 1})}">Next</a>
+        </div>
     </div>
 </div>
 </body>
