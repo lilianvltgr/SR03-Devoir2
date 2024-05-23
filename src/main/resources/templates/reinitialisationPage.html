@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Réinitialiser le mot de passe</title>
+    <title>Page de Profil</title>
+    <link rel="stylesheet" href="../static/CSS/adminHomePage.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
+    <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
 </head>
 <body>
-<p th:if="${message}" th:text="${message}"></p>
-<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+<h1>Page de Profil</h1>
+
+<!-- Afficher les messages de succès ou d'erreur -->
+<div th:if="${updateSuccess}">
+    <div style="color: green;" th:text="${updateSuccess}"></div>
+</div>
+<div th:if="${updateError}">
+    <div style="color: red;" th:text="${updateError}"></div>
+</div>
+
+<!-- Formulaire de mise à jour du mot de passe -->
+<form th:action="@{/updatePassword}" method="post">
+    <input type="email" name="mail" placeholder="Entrez votre email" required>
+    <input type="password" name="newPassword" placeholder="Nouveau mot de passe" required>
+    <button type="submit">Mettre à jour le mot de passe</button>
+
+</form>
+
+<div th:if="${updateSuccess}">
+    <md-fab label="Accueil" id="HomePage" ></md-fab><br><br>
+</div>
+
+
 </body>
+<script>
+    document.getElementById('HomePage').addEventListener('click', function() {
+        window.location.href = 'http://localhost:8080/AdminController';
+    });
+
+</script>
 </html>

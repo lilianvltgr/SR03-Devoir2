@@ -1,5 +1,6 @@
 package fr.utc.sr03.chat_admin.database;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,10 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
     Optional<User> findByUserId(long id);
     @Transactional
     Integer deleteByUserId(long id);
+
+    //Page<User> findByLastNameContainingIgnoreCase(String lastname);
+
+    Optional<User> findUserByMail (String mail);
 
     // ajouter toutes les méthodes nécessaires qui requièrent un échange avec la bdd
 

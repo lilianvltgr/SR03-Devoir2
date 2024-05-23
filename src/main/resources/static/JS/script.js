@@ -76,7 +76,4 @@ document.getElementById('forgotPasswordBtn').addEventListener('click', function(
     document.getElementById('resetPasswordForm').style.display = 'block';
 });
 
-function sendResetLink() {
-    var email = document.getElementById('resetEmail').value;
-    // Ajoutez ici la logique pour envoyer une requête au serveur
-}
+

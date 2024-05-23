@@ -149,26 +149,57 @@ public class AdminController {
             return getUserList(model);
         }
 
-        @PostMapping("/update")
-        public String updateUser (@RequestParam("password") String password,
-                @RequestParam("email") String email,
-                @RequestParam("firstname") String firstname,
-                @RequestParam("lastname") String lastname,
-        @Param("admin") boolean admin,
-        @Param("active") boolean active,
-        @RequestParam("userId") int userId,
-        Model model){
-            System.out.println(admin);
+    @PostMapping("/update")
+    public String updateUser(@RequestParam("password") String password,
+                             @RequestParam("email") String email,
+                             @RequestParam("firstname") String firstname,
+                             @RequestParam("lastname") String lastname,
+                             @Param("admin") boolean admin,
+                             @Param("active") boolean active,
+                             @RequestParam("userId") int userId,
+                             Model model) {
+        System.out.println(admin);
 
-            User user = new User(admin, active, lastname, firstname, email, password);
-            user.setUserId(userId);
+        User user = new User(admin, active, lastname, firstname, email, password);
+        user.setUserId(userId);
+        userRepository.saveAndFlush(user);
+        model.addAttribute("userInfos", user);
+        model.addAttribute("userUpdated", true);
+        return "userInfos";
+    }
+
+
+    @PostMapping("/updatePassword")
+    public String updatePassword(@RequestParam("mail") String mail,
+                                 @RequestParam("newPassword") String newPassword,
+                                 Model model) {
+        System.out.println("Received mail: " + mail);
+        System.out.println("Received new password: " + newPassword);
+
+        Optional<User> userOptional = userRepository.findUserByMail(mail);
+        System.out.println("User found: " + userOptional.isPresent());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
-            model.addAttribute("userInfos", user);
-            model.addAttribute("userUpdated", true);
-            return "userInfos";
+            System.out.println("Password updated successfully.");
+            model.addAttribute("updateSuccess", "Votre mot de passe a été mis à jour avec succès.");
+        } else {
+            System.out.println("No user found with the provided email.");
+            model.addAttribute("updateError", "Aucun utilisateur trouvé avec l'e-mail fourni.");
         }
 
-     // TO DO controleur
+        return "reinitialisationPage";
+    }
+
+
+    @GetMapping("/resetPassword")
+    public String resetPasswordPage() {
+        return "reinitialisationPage"; // Nom de la page Thymeleaf pour réinitialiser le mot de passe
+    }
+    // TO DO controleur
+
 
 
     }

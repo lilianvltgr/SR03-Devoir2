@@ -23,14 +23,32 @@
     <br>
     <button type="submit">Se connecter</button>
 </form>
-<button> <a href="https://google.com"> Mot de passe oublié </a></button>
+<button onclick="toggleResetPasswordForm()" > Mot de passe oublié </button>
 <div id="resetPasswordForm" style="display:none">
     <input type="email" id="resetEmail" name="resetEmail" placeholder="Entrez votre email" required>
-    <button type="submit" onclick="sendResetLink()">Envoyer le lien</button>
+
+    <button type="submit" id="resetPage" onclick="sendResetLink()">Envoyer le lien</button>
 </div>
 <!--TODO -->
 <div th:if="${authFailed}" style="color:red">
     Authentification failed, please try again.
 </div>
 </body>
+<script>
+    function toggleResetPasswordForm() {
+        var form = document.getElementById('resetPasswordForm');
+        form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+    }
+    document.getElementById('resetPage').addEventListener('click', function() {
+        window.location.href = 'http://localhost:8080/AdminController/resetPassword';
+    });
+
+    function sendResetLink() {
+        var email = document.getElementById('resetEmail').value;
+
+        console.log("mail a été envoyé ", email);
+        // window.location.href = 'http://localhost:8080/AdminController/resetPassword'; // URL vers laquelle rediriger pour obtenir le formulaire de réinitialisation
+
+    }
+</script>
 </html>

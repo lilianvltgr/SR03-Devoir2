@@ -90,4 +90,14 @@ public class UserController {
             return new ResponseEntity<>("Failed to delete user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/findUserByEmail")
+    public ResponseEntity<User> findUserByEmail(@RequestParam String mail) {
+        Optional<User> userOptional = userRepository.findUserByMail(mail);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.ok(userOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
