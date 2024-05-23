@@ -32,3 +32,7 @@ Utilisation de Node => react se connecte à spring par rest
 Architecture WEBSERVICE != MVC 
 
 Possible d'utiliser POSTMAN pour tester les requêtes http 
+
+Sécurité => JWT => jeton (token) signé généré coté serveur => jeton généré au niveau de spring lors de l'authentification => renvoi à réact et stockage en local 
+A chaque requete de react vers spring => header contenant le jetton pour vérifier si la requete est authorized ou non. 
+
