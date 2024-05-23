@@ -27,6 +27,8 @@ public class User {
     String firstname;
     @Column(name = "mail")
     String mail;
+    @NotEmpty
+    @Size(min = 8)
     String password;
 
     public User(boolean admin, boolean actif, String lastname, String firstname, String mail, String password) {

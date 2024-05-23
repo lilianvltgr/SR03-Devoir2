@@ -3,6 +3,7 @@ package fr.utc.sr03.chat_admin.controller_web;
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
@@ -95,13 +97,15 @@ public class AdminController {
         }
 
         @PostMapping("/addUser")
-        public String addUser (Model model,
-                @RequestParam("password") String password,
-                @RequestParam("email") String email,
-                @RequestParam("firstname") String firstname,
-                @RequestParam("lastname") String lastname,
-        @Param("admin") boolean admin){
-
+        public String addUser (@Valid BindingResult result, Model model,
+                               @RequestParam("password") String password,
+                               @RequestParam("email") String email,
+                               @RequestParam("firstname") String firstname,
+                               @RequestParam("lastname") String lastname,
+                               @Param("admin") boolean admin){
+            if (result.hasErrors()) {
+                return "error";
+            }
             //addUser pourrait être supprimé pour être remplacé par saveAndFlush
             userRepository.addUser(admin, lastname, firstname, email, password);
             model.addAttribute("lastUserAdded", lastname + " " + firstname);
