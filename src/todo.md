@@ -9,9 +9,26 @@ Choses à faire :
 
 Interface sort pour le tri !
 findByLastNameContaigningIgnoredCase
-Page 
+Page
 
 Validation coté serveur
-@NotEmpty 
+@NotEmpty
 @Valid
 @inputResult
+
+
+--- 
+
+React = exprimé côté client => communication avec spring côté serveur 
+
+Exemple = recup des listes de chats  
+ 
+Utilisation de Node => react se connecte à spring par rest 
+=> Controleur REST qui va chercher des infos dans la BDD 
+=> la base renvoie des infos en java 
+=> Spring va construire automatiquement un json à partir du jpa que la base renvoie 
+=> manipulation du json sur réact pour renvoyer les infos en HTML renvoyées au client. 
+
+Architecture WEBSERVICE != MVC 
+
+Possible d'utiliser POSTMAN pour tester les requêtes http 

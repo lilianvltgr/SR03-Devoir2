@@ -97,15 +97,13 @@ public class AdminController {
         }
 
         @PostMapping("/addUser")
-        public String addUser (@Valid BindingResult result, Model model,
+        public String addUser (Model model,
                                @RequestParam("password") String password,
                                @RequestParam("email") String email,
                                @RequestParam("firstname") String firstname,
                                @RequestParam("lastname") String lastname,
                                @Param("admin") boolean admin){
-            if (result.hasErrors()) {
-                return "error";
-            }
+
             //addUser pourrait être supprimé pour être remplacé par saveAndFlush
             userRepository.addUser(admin, lastname, firstname, email, password);
             model.addAttribute("lastUserAdded", lastname + " " + firstname);
