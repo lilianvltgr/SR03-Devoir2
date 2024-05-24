@@ -1,24 +1,15 @@
 package fr.utc.sr03.chat_admin.controller_web;
-
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,16 +24,23 @@ public class AdminController {
         this.userRepository = userRepository;
     }
 
-
     @GetMapping("/users")
-    public String getUserList(Model model) {
+    public String getUserList(Model model,WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
         return "userList";
     }
 
     @GetMapping("/userInfos/{userId}")
-    public String getUserInfos(Model model, @PathVariable Long userId) {
+    public String getUserInfos(Model model, @PathVariable Long userId,WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         Optional<User> userOptional = userRepository.findByUserId(userId);
         if (userOptional.isPresent()) {
             User userInfos = userOptional.get();
@@ -52,7 +50,11 @@ public class AdminController {
     }
 
     @GetMapping("/inactiveUsers")
-    public String getInactiveUsers(Model model) {
+    public String getInactiveUsers(Model model,WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         List<User> allUsers = userRepository.findAll();
         List<User> inactiveUsers = new ArrayList<>();
         for (User entry : allUsers) {
@@ -65,12 +67,20 @@ public class AdminController {
     }
 
     @GetMapping("/getUserForm")
-    public String getUserForm() {
+    public String getUserForm(WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         return "newUserForm";
     }
 
     @GetMapping("")
-    public String goHome() {
+    public String goHome(WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         return "homePage";
     }
 
@@ -83,6 +93,8 @@ public class AdminController {
     public String deconnexion(WebRequest request) {
         request.removeAttribute("email", WebRequest.SCOPE_SESSION);
         request.removeAttribute("isAdmin", WebRequest.SCOPE_SESSION);
+        request.removeAttribute("connected", WebRequest.SCOPE_SESSION);
+
         return "redirect:/AdminController";
     }
 
@@ -96,13 +108,16 @@ public class AdminController {
     }
 
     @GetMapping("/adminHomePage")
-    public String adminHomePage() {
-
+    public String adminHomePage(WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         return "AdminHomePage";
     }
 
     @PostMapping("/addUser")
-    public String addUser(Model model,
+    public String addUser(Model model,WebRequest request,
                           @RequestParam("password") String password,
                           @RequestParam("email") String email,
                           @RequestParam("firstname") String firstname,
@@ -110,6 +125,10 @@ public class AdminController {
                           @Param("admin") boolean admin) {
 
         //addUser pourrait être supprimé pour être remplacé par saveAndFlush
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         userRepository.addUser(admin, lastname, firstname, email, password);
         model.addAttribute("lastUserAdded", lastname + " " + firstname);
         return "newUserForm";
@@ -126,6 +145,8 @@ public class AdminController {
                 model.addAttribute("currentAdmin", email);
                 //TODO ajouter la vérification de la désactivation temporaire du compte
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
+                request.setAttribute("connected", true, WebRequest.SCOPE_SESSION);
+                System.out.println("connected set");
                 request.setAttribute("isAdmin", true, WebRequest.SCOPE_SESSION);
                 return "homePage";
             }
@@ -136,22 +157,30 @@ public class AdminController {
     }
 
     @GetMapping("/getAdmins")
-    public List<User> getAdmins() {
+    private List<User> getAdmins() {
         List<User> admins = userRepository.findAdminOnly();
         return admins;
     }
 
     @GetMapping("/getAdminsTemplate")
-    public String getAdmins(Model model) {
+    public String getAdmins(Model model,WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         List<User> admins = userRepository.findAdminOnly();
         model.addAttribute("admins", admins);
         return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
     }
 
     @DeleteMapping("/delete/{userId}")
-    public String deleteUser(Model model, @PathVariable Long userId) {
+    public String deleteUser(Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         Integer deleted = userRepository.deleteByUserId(userId);
-        return getUserList(model);
+        return getUserList(model, request);
     }
 
     @PostMapping("/update")
@@ -162,9 +191,11 @@ public class AdminController {
                              @Param("admin") boolean admin,
                              @Param("active") boolean active,
                              @RequestParam("userId") int userId,
-                             Model model) {
-        System.out.println(admin);
-
+                             Model model, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         User user = new User(admin, active, lastname, firstname, email, password);
         user.setUserId(userId);
         userRepository.saveAndFlush(user);
@@ -177,8 +208,11 @@ public class AdminController {
     @PostMapping("/updatePassword")
     public String updatePassword(@RequestParam("mail") String mail,
                                  @RequestParam("newPassword") String newPassword,
-                                 Model model) {
-
+                                 Model model, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         System.out.println("User found: " + userOptional.isPresent());
 
@@ -204,6 +238,10 @@ public class AdminController {
                               @RequestParam("page") Optional<Integer> page,
                               @RequestParam("lastname") Optional<String> lastname,
                               @RequestParam("sort") Optional<Integer> sort) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
+        }
         // Init du tri
         Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
         switch (sort.orElse(0)) {

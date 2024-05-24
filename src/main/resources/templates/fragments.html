@@ -23,7 +23,7 @@
 <div class="container">
     <div th:fragment="sideBar">
         <div class="sidebar">
-        <h2>Sidebar Menu</h2>
+        <h2>Menu</h2>
             <md-fab label="Accueil" id="HomePage" ></md-fab><br><br>
 
         <md-fab label="Ajouter un utilisateur" id="addUser" ></md-fab><br><br>
@@ -40,7 +40,7 @@
                 window.location.href = 'http://localhost:8080/AdminController/inactiveUsers';
             });
             document.getElementById('utilisateurs').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/users';
+                window.location.href = 'http://localhost:8080/AdminController/usersPage';
             });
         </script>
     </div>

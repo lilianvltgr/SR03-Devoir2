@@ -8,7 +8,7 @@ body {
      background-color: white;
  }
 
-.button-container {
+.button-container .centered-content {
     background-color: #F4F4F4;
     padding: 60px;
     border-radius: 10px;
