@@ -5,7 +5,7 @@
 .sidebar {
     width: 250px; /* Fixed width for the sidebar */
     background-color: rgba(244, 244, 244, 0.71); /* Light grey background */
-    padding: 100px; /* Padding around the text */
+    padding: 25px; /* Padding around the text */
 }
 .content {
     flex-grow: 1; /* Take up the remaining space */

@@ -1,15 +1,15 @@
 package fr.utc.sr03.chat_admin.controller_web;
+
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +25,7 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public String getUserList(Model model,WebRequest request) {
+    public String getUserList(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
@@ -36,7 +36,7 @@ public class AdminController {
     }
 
     @GetMapping("/userInfos/{userId}")
-    public String getUserInfos(Model model, @PathVariable Long userId,WebRequest request) {
+    public String getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
@@ -50,19 +50,32 @@ public class AdminController {
     }
 
     @GetMapping("/inactiveUsers")
-    public String getInactiveUsers(Model model,WebRequest request) {
+    public String getInactiveUsers(Model model, WebRequest request,
+                                   @RequestParam("page") Optional<Integer> page,
+                                   @RequestParam("lastname") Optional<String> lastname,
+                                   @RequestParam("sort") Optional<Integer> sort) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        List<User> allUsers = userRepository.findAll();
-        List<User> inactiveUsers = new ArrayList<>();
-        for (User entry : allUsers) {
-            if (!entry.isActive()) {
-                inactiveUsers.add(entry);
-            }
+        // Init du tri
+        Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
+        switch (sort.orElse(0)) {
+            case 0:
+                sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
+                break;
+            case 1:
+                sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "lastname");
+                break;
         }
-        model.addAttribute("users", inactiveUsers);
+        // Recup des users
+        Page<User> users = userRepository.findByActiveFalseAndLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 2, sortCriteria));
+        model.addAttribute("users", users.getContent());
+        model.addAttribute("current_page", page.orElse(0));
+        model.addAttribute("total_pages", users.getTotalPages());
+        model.addAttribute("lastname", lastname.orElse(""));
+        model.addAttribute("sort", sort.orElse(0));
+        model.addAttribute("userPage", users);
         return "userList";
     }
 
@@ -117,7 +130,7 @@ public class AdminController {
     }
 
     @PostMapping("/addUser")
-    public String addUser(Model model,WebRequest request,
+    public String addUser(Model model, WebRequest request,
                           @RequestParam("password") String password,
                           @RequestParam("email") String email,
                           @RequestParam("firstname") String firstname,
@@ -129,8 +142,14 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        userRepository.addUser(admin, lastname, firstname, email, password);
-        model.addAttribute("lastUserAdded", lastname + " " + firstname);
+        Optional<User> user = userRepository.findUserByMail(email);
+        if (user.isPresent()) {
+            model.addAttribute("emailAlreadyUsed", true);
+        } else {
+            userRepository.addUser(admin, lastname, firstname, email, password);
+            model.addAttribute("lastUserAdded", lastname + " " + firstname);
+            model.addAttribute("emailAlreadyUsed", false);
+        }
         return "newUserForm";
     }
 
@@ -163,7 +182,7 @@ public class AdminController {
     }
 
     @GetMapping("/getAdminsTemplate")
-    public String getAdmins(Model model,WebRequest request) {
+    public String getAdmins(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
@@ -204,7 +223,6 @@ public class AdminController {
         return "userInfos";
     }
 
-
     @PostMapping("/updatePassword")
     public String updatePassword(@RequestParam("mail") String mail,
                                  @RequestParam("newPassword") String newPassword,
@@ -215,16 +233,11 @@ public class AdminController {
         }
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         System.out.println("User found: " + userOptional.isPresent());
-
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
-            model.addAttribute("updateSuccess", "Votre mot de passe a été mis à jour avec succès.");
-        } else {
-            model.addAttribute("updateError", "Aucun utilisateur trouvé avec l'e-mail fourni.");
         }
-
         return "AuthentificationAdmin";
     }
 
@@ -260,12 +273,6 @@ public class AdminController {
         model.addAttribute("lastname", lastname.orElse(""));
         model.addAttribute("sort", sort.orElse(0));
         model.addAttribute("userPage", users);
-
-        System.out.println("users: " + users.getContent());
-        System.out.println("current_page: " + page.orElse(0));
-        System.out.println("total_pages: " + users.getTotalPages());
-        System.out.println("lastname: " + lastname.orElse(""));
-        System.out.println("sort: " + sort.orElse(0));
         return "userList";
     }
 }
