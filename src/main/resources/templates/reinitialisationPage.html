@@ -25,16 +25,5 @@
 
 </form>
 
-<div th:if="${updateSuccess}">
-    <md-fab label="Accueil" id="HomePage" ></md-fab><br><br>
-</div>
-
-
 </body>
-<script>
-    document.getElementById('HomePage').addEventListener('click', function() {
-        window.location.href = 'http://localhost:8080/AdminController';
-    });
-
-</script>
 </html>
