@@ -17,7 +17,7 @@ public class Chat {
     String title;
     String description;
 
-    public Chat(int chatId, Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
+    public Chat(long chatId, Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
         this.chatId = chatId;
         this.creationDate = creationDate;
         this.duration = dureeValidite;
@@ -69,7 +69,14 @@ public class Chat {
         this.description = description;
     }
 
-    //endregion
+    public long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(long creatorId) {
+        this.creatorId = creatorId;
+    }
+//endregion
 
     public static void main(String[] args) {
 
