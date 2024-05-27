@@ -28,7 +28,7 @@ public class User {
     @Column(name = "mail")
     @NotEmpty(message = "mail obligatoire")
     String mail;
-    @NotEmpty
+    @NotEmpty(message = "mot de passe obligatoire")
 
     @Size(min = 8)
     String password;

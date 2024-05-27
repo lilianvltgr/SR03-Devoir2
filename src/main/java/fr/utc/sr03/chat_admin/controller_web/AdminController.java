@@ -156,25 +156,15 @@ public class AdminController {
         }
         return "newUserForm";
     }
-//    @PostMapping("/addUser")
-//    public String addUser(@Valid User user, BindingResult result, WebRequest request, Model model) {
-//        // Vérifier l'état de la connexion de l'utilisateur
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return "AuthentificationAdmin"; // Assurez-vous que le nom de vue est correct
-//        }
-//
-//        // Gestion des erreurs de validation
-//        if (result.hasErrors()) {
-//            model.addAttribute("user", user);
-//            return "newUserForm"; // Assurez-vous que le nom de vue est correct
-//        }
-//
-//        // Sauvegarder l'utilisateur si aucune erreur de validation
-//        userRepository.addUser(user.getAdmin(), user.getLastname(), user.getFirstname(), user.getMail(), user.getPassword());
-//        model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
-//        return "newUserForm"; // Rediriger ou retourner selon la logique souhaitée
-//    }
+    @PostMapping("/test")
+    public String test(@Valid @ModelAttribute User user, BindingResult result, WebRequest request, Model model) {
+        System.out.println(user);
+
+        result.hasErrors();
+        return "";
+    }
+
+
 
     @PostMapping("/isAdmin")
     public String isAdmin(Model model, WebRequest request,
