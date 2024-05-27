@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
@@ -33,43 +32,42 @@
     <div class="sidebar">
         <div th:replace="fragments :: sideBar"></div>
     </div>
-  <div class="content">
+    <div class="content">
         <div th:if="${lastUserAdded}" style="background-color: darkseagreen">
             <span th:text="'Dernier utilisateur ajouté : ' + ${lastUserAdded}"></span><br>
         </div>
-        <div th:if="${emailAlreadyUsed}" style="background-color: orangered">
-            <span> Veuillez choisir une adresse mail unique</span><br>
-        </div>
-<!--onsubmit= "return validateNewUserForm()"-->
+        <!--        <div th:if="${#fields.hasErrors('emailAlreadyUsed')}" style="background-color: orangered">-->
+        <!--            <span> Veuillez choisir une adresse mail unique</span><br>-->
+        <!--        </div>-->
 
-      <form action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
-           <label for="lastname">Nom :</label>
-           <input type="text" id="lastname" name="lastname" required th:field="*{lastname}">
-           <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Erreur Nom</span>
-           <br>
+        <form action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
+            <label for="lastname">Nom :</label>
+            <input type="text" id="lastname" name="lastname" required th:field="*{lastname}">
+            <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Erreur Nom</span>
+            <br>
 
-           <label for="firstname">Prénom :</label>
-           <input type="text" id="firstname" name="firstname" required th:field="*{firstname}">
-           <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Erreur Prénom</span>
-           <br>
+            <label for="firstname">Prénom :</label>
+            <input type="text" id="firstname" name="firstname" required th:field="*{firstname}">
+            <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Erreur Prénom</span>
+            <br>
 
-           <label for="email">Email :</label>
-           <input type="email" id="email" name="mail" required th:field="*{mail}">
-           <span th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">Erreur Email</span>
-           <br>
+            <label for="email">Email :</label>
+            <input type="email" id="email" name="mail" required th:field="*{mail}">
+            <ul>
+                <li th:each="err : ${#fields.errors('mail')}" th:errors="*{mail}"> Erreur mail</li>
+            </ul>
+            <br>
 
-           <label for="password">Mot de passe :</label>
-           <input type="password" id="password" name="password" required th:field="*{password}">
-           <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Erreur Mot de Passe</span>
-           <br>
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="password" required th:field="*{password}">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:text="${'password'}">Erreur Mot de Passe</span>
+            <br>
 
-           <label for="admin">Administrateur :</label>
-           <input type="checkbox" id="admin" name="admin">
-           <br>
-
-           <button type="submit">Ajouter l'utilisateur</button>
-       </form>
-        <script src="/JS/script.js"></script>
+            <label for="admin">Administrateur :</label>
+            <input type="checkbox" id="admin" name="admin">
+            <br>
+            <button type="submit">Ajouter l'utilisateur</button>
+        </form>
     </div>
 </div>
 </body>

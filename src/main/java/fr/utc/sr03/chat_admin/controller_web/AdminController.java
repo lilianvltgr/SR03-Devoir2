@@ -135,8 +135,8 @@ public class AdminController {
     }
 
     @PostMapping("/addUser")
-    public String addUser(@ModelAttribute @Valid User user, Model model, WebRequest request,
-                          BindingResult result) {
+    public String addUser(@ModelAttribute @Valid User user, Model model,
+                          BindingResult result , WebRequest request) {
 
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
@@ -146,31 +146,36 @@ public class AdminController {
             return "newUserForm";
         }
 
-
         Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
         if (existingUser.isPresent()) {
-            model.addAttribute("emailAlreadyUsed", true);
-            ObjectError email = new ObjectError("email", "Email Already used");
-            result.addError(email);
+            ObjectError mail = new ObjectError("mail", "Email Already used");
+            result.addError(mail);
+            System.out.println("même e-mail");
         } else {
             userRepository.saveAndFlush(user);
             model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
-            model.addAttribute("emailAlreadyUsed", false);
         }
         return "newUserForm";
     }
-
-    @PostMapping("/test")
-    public String test(@ModelAttribute @Valid User user, BindingResult result, WebRequest request, Model model) {
-
-        System.out.println(user.getLastname());
-
-        if (result.hasErrors()) {
-            System.out.println("------------------------Erreur !--------------------------");
-            return "newUserForm";
+    @PostMapping("/truc")
+    public String postTruc(@ModelAttribute @Valid User user, BindingResult result, Model model, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return "AuthentificationAdmin";
         }
-        System.out.println("Erreurs du formulaire : " + result.getErrorCount());
-        return "newUserForm";
+        if (result.hasErrors()) {
+            return "trucForm";
+        }
+        Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
+        if (existingUser.isPresent()) {
+            ObjectError mail = new ObjectError("mail", "Email Already used");
+            result.addError(mail);
+            System.out.println("même e-mail");
+        } else {
+            userRepository.saveAndFlush(user);
+            model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
+        }
+        return "trucForm";
     }
 
     @PostMapping("/isAdmin")
@@ -303,19 +308,6 @@ public class AdminController {
         return "trucForm";
     }
 
-    @PostMapping("/truc")
-    public String postTruc(@ModelAttribute @Valid User user, BindingResult result, Model model) {
 
-        System.out.println(user.getLastname());
-
-        if (result.hasErrors()) {
-            System.out.println("------------------------Erreur !--------------------------");
-            return "trucForm";
-        }
-        System.out.println("Erreurs du formulaire : " + result.getErrorCount());
-        System.out.println("has err : " + result.hasErrors());
-
-        return "trucForm";
-    }
 }
 
