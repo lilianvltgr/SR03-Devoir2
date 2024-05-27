@@ -40,26 +40,27 @@
         <div th:if="${emailAlreadyUsed}" style="background-color: orangered">
             <span> Veuillez choisir une adresse mail unique</span><br>
         </div>
+<!--onsubmit= "return validateNewUserForm()"-->
 
-      <!-- <form action="/AdminController/addUser" method="POST" onsubmit= "return validateNewUserForm()">
+      <form action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
            <label for="lastname">Nom :</label>
-           <input type="text" id="lastname" name="lastname" required>
-           <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{user.lastname}">Erreur Nom</span>
+           <input type="text" id="lastname" name="lastname" required th:field="*{lastname}">
+           <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Erreur Nom</span>
            <br>
 
            <label for="firstname">Prénom :</label>
-           <input type="text" id="firstname" name="firstname" required>
-           <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{user.firstname}">Erreur Prénom</span>
+           <input type="text" id="firstname" name="firstname" required th:field="*{firstname}">
+           <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Erreur Prénom</span>
            <br>
 
            <label for="email">Email :</label>
-           <input type="email" id="email" name="mail" required>
-           <span th:if="${#fields.hasErrors('mail')}" th:errors="*{user.mail}">Erreur Email</span>
+           <input type="email" id="email" name="mail" required th:field="*{mail}">
+           <span th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">Erreur Email</span>
            <br>
 
            <label for="password">Mot de passe :</label>
-           <input type="password" id="password" name="password" required>
-           <span th:if="${#fields.hasErrors('password')}" th:errors="*{user.password}">Erreur Mot de Passe</span>
+           <input type="password" id="password" name="password" required th:field="*{password}">
+           <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Erreur Mot de Passe</span>
            <br>
 
            <label for="admin">Administrateur :</label>
@@ -68,26 +69,6 @@
 
            <button type="submit">Ajouter l'utilisateur</button>
        </form>
--->
-        <form action="/AdminController/addUser" method="POST" onsubmit= "return validateNewUserForm()">
-            <label for="lastname">Nom :</label>
-            <input type="text" id="lastname" name="lastname" required>
-            <br>
-            <label for="firstname">Prénom :</label>
-            <input type="text" id="firstname" name="firstname" required>
-            <br>
-            <label for="email">Email :</label>
-            <input type="email" id="email" name="email" required>
-
-            <br>
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
-            <br>
-            <label for="admin">Administrateur :</label>
-            <input type="checkbox" id="admin" name="admin" >
-            <br>
-            <button type="submit">Ajouter l'utilisateur</button>
-        </form>
         <script src="/JS/script.js"></script>
     </div>
 </div>

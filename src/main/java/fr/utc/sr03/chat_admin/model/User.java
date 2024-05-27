@@ -29,7 +29,6 @@ public class User {
     @NotEmpty(message = "mail obligatoire")
     String mail;
     @NotEmpty(message = "mot de passe obligatoire")
-
     @Size(min = 8)
     String password;
 

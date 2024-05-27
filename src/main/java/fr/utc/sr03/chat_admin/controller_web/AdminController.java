@@ -8,6 +8,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
@@ -134,37 +135,43 @@ public class AdminController {
     }
 
     @PostMapping("/addUser")
-    public String addUser(Model model, WebRequest request,
-                          @RequestParam("password") String password,
-                          @RequestParam("email") String email,
-                          @RequestParam("firstname") String firstname,
-                          @RequestParam("lastname") String lastname,
-                          @Param("admin") boolean admin) {
+    public String addUser(@ModelAttribute @Valid User user, Model model, WebRequest request,
+                          BindingResult result) {
 
-        //addUser pourrait être supprimé pour être remplacé par saveAndFlush
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        Optional<User> user = userRepository.findUserByMail(email);
-        if (user.isPresent()) {
+        if (result.hasErrors()) {
+            return "newUserForm";
+        }
+
+
+        Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
+        if (existingUser.isPresent()) {
             model.addAttribute("emailAlreadyUsed", true);
+            ObjectError email = new ObjectError("email", "Email Already used");
+            result.addError(email);
         } else {
-            userRepository.addUser(admin, lastname, firstname, email, password);
-            model.addAttribute("lastUserAdded", lastname + " " + firstname);
+            userRepository.saveAndFlush(user);
+            model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
             model.addAttribute("emailAlreadyUsed", false);
         }
         return "newUserForm";
     }
+
     @PostMapping("/test")
-    public String test(@Valid @ModelAttribute User user, BindingResult result, WebRequest request, Model model) {
-        System.out.println(user);
+    public String test(@ModelAttribute @Valid User user, BindingResult result, WebRequest request, Model model) {
 
-        result.hasErrors();
-        return "";
+        System.out.println(user.getLastname());
+
+        if (result.hasErrors()) {
+            System.out.println("------------------------Erreur !--------------------------");
+            return "newUserForm";
+        }
+        System.out.println("Erreurs du formulaire : " + result.getErrorCount());
+        return "newUserForm";
     }
-
-
 
     @PostMapping("/isAdmin")
     public String isAdmin(Model model, WebRequest request,
@@ -287,6 +294,28 @@ public class AdminController {
         model.addAttribute("sort", sort.orElse(0));
         model.addAttribute("userPage", users);
         return "userList";
+    }
+
+    //////
+    @GetMapping("/truc")
+    public String getTruc(Model model, WebRequest request) {
+        model.addAttribute("user", new User()); // Ajoutez cette ligne pour lier le formulaire
+        return "trucForm";
+    }
+
+    @PostMapping("/truc")
+    public String postTruc(@ModelAttribute @Valid User user, BindingResult result, Model model) {
+
+        System.out.println(user.getLastname());
+
+        if (result.hasErrors()) {
+            System.out.println("------------------------Erreur !--------------------------");
+            return "trucForm";
+        }
+        System.out.println("Erreurs du formulaire : " + result.getErrorCount());
+        System.out.println("has err : " + result.hasErrors());
+
+        return "trucForm";
     }
 }
 
