@@ -8,6 +8,8 @@ public interface ChatRepository extends JpaRepository<Chat,Integer>, ChatResposi
 
     int findChatsByChatId(long id);
 
+    boolean deleteChatByChatId(long id);
+
 
 
 }

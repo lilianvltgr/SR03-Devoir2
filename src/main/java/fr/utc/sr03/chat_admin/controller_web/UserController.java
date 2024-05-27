@@ -164,8 +164,8 @@ public class UserController {
         return chatList;
     }
 
-    @PostMapping("/createChat/{userId}")
-    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, @PathVariable Long userId, WebRequest request) {
+    @PostMapping("/createChat")
+    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return null;
@@ -175,5 +175,29 @@ public class UserController {
         return chatRepository.save(newChat);
 
     }
+
+    @DeleteMapping("/deleteChat/{chatId}")
+    public boolean deleteChat(Model model, @PathVariable Long chatId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return false;
+        }
+        return chatRepository.deleteChatByChatId(chatId);
+
+    }
+
+    //modifier chat
+    @PostMapping("/updateChat")
+    public Chat updateChat(@Valid @ModelAttribute Chat chat, Model model, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        Chat newChat = new Chat(chat.getChatId(), chat.getCreationDate(), chat.getDuration(), chat.getTitle(), chat.getDescription(), chat.getCreatorId());
+        System.out.println(newChat);
+        return chatRepository.saveAndFlush(newChat);
+
+    }
+
 
 }
