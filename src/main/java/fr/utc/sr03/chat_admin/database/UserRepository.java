@@ -25,6 +25,8 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
     Page<User> findByLastnameContainingIgnoreCase(String lastname, Pageable pageable);
     Page<User> findByActiveFalseAndLastnameContainingIgnoreCase(String lastname, Pageable pageable);
 
+
+
     // ajouter toutes les méthodes nécessaires qui requièrent un échange avec la bdd
 
 }

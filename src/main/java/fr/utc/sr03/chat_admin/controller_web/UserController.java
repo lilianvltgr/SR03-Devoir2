@@ -1,14 +1,18 @@
 package fr.utc.sr03.chat_admin.controller_web;
 
+import fr.utc.sr03.chat_admin.database.ChatRepository;
 import fr.utc.sr03.chat_admin.database.UserRepository;
+import fr.utc.sr03.chat_admin.model.Chat;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -113,13 +117,16 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 @ResponseBody
 @RequestMapping("/UserController")
-public class UserController{
+public class UserController {
 
     private final UserRepository userRepository;
+    private final ChatRepository chatRepository;
 
     @Autowired
-    private UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;}
+    private UserController(UserRepository userRepository, ChatRepository chatRepository) {
+        this.userRepository = userRepository;
+        this.chatRepository = chatRepository;
+    }
 
     @GetMapping("/userInfos/{userId}")
     public User getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
@@ -134,4 +141,39 @@ public class UserController{
         //no user found
         return null;
     }
+
+    @GetMapping("/userInfos/personnalChatList/{userId}")
+    public List<Chat> getChatsOwnedByUser(Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        List<Chat> chatList = userRepository.findChatsCreatedBy(userId);
+        System.out.println(chatList); // verif erreurs
+        return chatList;
     }
+
+    @GetMapping("/userInfos/chatsList/{userId}")
+    public List<Chat> getChatsUser(Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        List<Chat> chatList = userRepository.findChatsRelatedToUser(userId);
+        System.out.println(chatList); // verif erreurs
+        return chatList;
+    }
+
+    @PostMapping("/createChat/{userId}")
+    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        Chat newChat = new Chat(chat.getChatId(), chat.getCreationDate(), chat.getDuration(), chat.getTitle(), chat.getDescription(), chat.getCreatorId());
+        System.out.println(newChat);
+        return chatRepository.save(newChat);
+
+    }
+
+}
