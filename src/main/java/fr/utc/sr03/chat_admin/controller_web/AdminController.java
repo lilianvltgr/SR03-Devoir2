@@ -2,10 +2,12 @@ package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
@@ -80,13 +82,15 @@ public class AdminController {
     }
 
     @GetMapping("/getUserForm")
-    public String getUserForm(WebRequest request) {
+    public String getUserForm(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
+        model.addAttribute("user", new User()); // Ajoutez cette ligne pour lier le formulaire
         return "newUserForm";
     }
+
 
     @GetMapping("")
     public String goHome(WebRequest request) {
@@ -152,6 +156,25 @@ public class AdminController {
         }
         return "newUserForm";
     }
+//    @PostMapping("/addUser")
+//    public String addUser(@Valid User user, BindingResult result, WebRequest request, Model model) {
+//        // Vérifier l'état de la connexion de l'utilisateur
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return "AuthentificationAdmin"; // Assurez-vous que le nom de vue est correct
+//        }
+//
+//        // Gestion des erreurs de validation
+//        if (result.hasErrors()) {
+//            model.addAttribute("user", user);
+//            return "newUserForm"; // Assurez-vous que le nom de vue est correct
+//        }
+//
+//        // Sauvegarder l'utilisateur si aucune erreur de validation
+//        userRepository.addUser(user.getAdmin(), user.getLastname(), user.getFirstname(), user.getMail(), user.getPassword());
+//        model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
+//        return "newUserForm"; // Rediriger ou retourner selon la logique souhaitée
+//    }
 
     @PostMapping("/isAdmin")
     public String isAdmin(Model model, WebRequest request,
