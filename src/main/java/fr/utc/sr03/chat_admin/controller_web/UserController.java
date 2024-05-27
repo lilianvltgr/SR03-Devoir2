@@ -1,6 +1,7 @@
 package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
+import fr.utc.sr03.chat_admin.model.Chat;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,13 +114,14 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 @ResponseBody
 @RequestMapping("/UserController")
-public class UserController{
+public class UserController {
 
     private final UserRepository userRepository;
 
     @Autowired
     private UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;}
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/userInfos/{userId}")
     public User getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
@@ -134,4 +136,27 @@ public class UserController{
         //no user found
         return null;
     }
+
+    @GetMapping("/userInfos/personnalChatList/{userId}")
+    public List<Chat> getChatsOwnedByUser(Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        List<Chat> chatList = userRepository.findChatsCreatedBy(userId);
+        System.out.println(chatList); // verif erreurs
+        return chatList;
     }
+
+    @GetMapping("/userInfos/chatsList/{userId}")
+    public List<Chat> getChatsUser(Model model, @PathVariable Long userId, WebRequest request) {
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        if (connected == null || !connected.toString().equals("true")) {
+            return null;
+        }
+        List<Chat> chatList = userRepository.findChatsRelatedToUser(userId);
+        System.out.println(chatList); // verif erreurs
+        return chatList;
+    }
+
+}
