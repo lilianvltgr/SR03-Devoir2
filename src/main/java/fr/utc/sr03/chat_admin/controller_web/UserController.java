@@ -1,8 +1,10 @@
 package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.ChatRepository;
+import fr.utc.sr03.chat_admin.database.ChatUserRepository;
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.Chat;
+import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -10,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,96 +27,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-//@RestController
-//@RequestMapping("/UserController")
-//public class UserController {
-//    private final UserRepository userRepository;
-//
-//    @Autowired
-//    public UserController(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-//
-//    /*
-//    add one user to the database
-//     */
-//    @PostMapping("/userAdd")
-//    public ResponseEntity<String> addUser(@RequestBody User newUser) {
-//        try {
-//            //addUser pourrait être supprimé pour être remplacé par saveAndFlush
-//            userRepository.addUser(newUser.getAdmin(), newUser.getLastname(), newUser.getFirstname(), newUser.getMail(), newUser.getPassword());
-//            return new ResponseEntity<>("User added successfully", HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Failed to add user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @PostMapping("/userUpdate")
-//    public ResponseEntity<String> updateUser(@RequestBody User newUser) {
-//        try {
-//            userRepository.saveAndFlush(newUser);
-//            return new ResponseEntity<>("User added successfully", HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Failed to add user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    /*
-//    get one user with his id in parameter
-//     */
-//    @GetMapping("/getAllUsers")
-//    public List<User> getUser() {
-//        return userRepository.findAll();
-//    }
-//
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<?> getUser(@PathVariable Long userId) {
-//        try {
-//            Optional<User> userOptional = userRepository.findByUserId(userId);
-//
-//            if (userOptional.isPresent()) {
-//                User user = userOptional.get();
-//                return ResponseEntity.ok(user); // JSON format with status 200 OK
-//            } else {
-//                return ResponseEntity.notFound().build(); // response 404 NOT FOUND if User not found
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Failed to get user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//    /*
-//    Reflechir a si on fait un controller de modification global,
-//    ou 1 pour chaque parametre d'un User
-//    Si on fait un formulaire de modification on pourrait n'appeler qu'une fois le controller
-//    sinon faire separement
-//     */
-//
-//    @DeleteMapping("/{userId}")
-//    @Transactional
-//    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-//        try {
-//            Integer deleted = userRepository.deleteByUserId(userId);
-//            if (deleted == 1) {
-//                return ResponseEntity.ok("User deleted successfully");
-//            } else {
-//                return ResponseEntity.notFound().build();
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Failed to delete user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @GetMapping("/findUserByEmail")
-//    public ResponseEntity<User> findUserByEmail(@RequestParam String mail) {
-//        Optional<User> userOptional = userRepository.findUserByMail(mail);
-//        if (userOptional.isPresent()) {
-//            return ResponseEntity.ok(userOptional.get());
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//}
-
 
 
 @Controller
@@ -121,19 +36,22 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
+    private final ChatUserRepository chatUserRepository;
 
     @Autowired
-    private UserController(UserRepository userRepository, ChatRepository chatRepository) {
+    private UserController(UserRepository userRepository, ChatRepository chatRepository, ChatUserRepository chatUserRepository) {
         this.userRepository = userRepository;
         this.chatRepository = chatRepository;
+        this.chatUserRepository = chatUserRepository;
     }
 
     @GetMapping("/userInfos/{userId}")
     public User getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return null;
-        }
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return null;
+//        }
+        // throw error if there is no connexion ??
         Optional<User> userOptional = userRepository.findByUserId(userId);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -141,47 +59,70 @@ public class UserController {
         //no user found
         return null;
     }
+@GetMapping ("/getUsersInChat")
+public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequest request) {
+    Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
+    if (chat.isPresent()) {
+        List<ChatUser> chatUserList = chatUserRepository.findChatUsersByChat(chat.get());
+        return chatUserRepository.getUserFromChatUserList(chatUserList);
+    }
+    return null;
+}
+    @GetMapping("/addUserToChat")
+    public ChatUser adUserToChat(Model model,@RequestParam Long userId, @RequestParam Long chatId, WebRequest request) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
+        System.out.println("user : " + user.isPresent());
+        System.out.println("chat : " + chat.isPresent());
 
-    @GetMapping("/userInfos/personnalChatList/{userId}")
-    public List<Chat> getChatsOwnedByUser(Model model, @PathVariable Long userId, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return null;
+        if (user.isPresent() && chat.isPresent()) {
+            ChatUser chatUser = new ChatUser(user.get(), chat.get());
+            return chatUserRepository.saveAndFlush(chatUser);
         }
-        List<Chat> chatList = userRepository.findChatsCreatedBy(userId);
-        System.out.println(chatList); // verif erreurs
-        return chatList;
+        return null;
     }
 
-    @GetMapping("/userInfos/chatsList/{userId}")
+    @GetMapping("/chatsCreatedBy/{userId}")
     public List<Chat> getChatsUser(Model model, @PathVariable Long userId, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return null;
-        }
-        List<Chat> chatList = userRepository.findChatsRelatedToUser(userId);
-        System.out.println(chatList); // verif erreurs
-        return chatList;
+        //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return null;
+//        } //TODO Gérer la vérification de la connection
+        return chatRepository.findChatByCreatorId(userId);
     }
 
     @PostMapping("/createChat")
-    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return null;
+    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, BindingResult result, WebRequest request) {
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return null;
+//        } //TODO Gérer la vérification de la connection
+        if (result.hasErrors()) {
+            return null; //TODO Gérer les erreurs de validation
         }
-        Chat newChat = new Chat(chat.getChatId(), chat.getCreationDate(), chat.getDuration(), chat.getTitle(), chat.getDescription(), chat.getCreatorId());
-        System.out.println(newChat);
-        return chatRepository.save(newChat);
+//        Time dureeValidite = new Time(45);
+//        Long creatorId = 50L;
+//        Date currentDate = new Date();
+//        Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest",creatorId);
+        return chatRepository.save(chat);
+    }
 
+    @PostMapping("/createChatByHand")
+    public Chat createChatByHand(Model model, WebRequest request) {
+
+        Time dureeValidite = new Time(45);
+        Long creatorId = 50L;
+        Date currentDate = new Date();
+        Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest", creatorId);
+        return chatRepository.save(chat);
     }
 
     @DeleteMapping("/deleteChat/{chatId}")
-    public boolean deleteChat(Model model, @PathVariable Long chatId, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return false;
-        }
+    public int deleteChat(Model model, @PathVariable Long chatId, WebRequest request) {
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return false;
+//        }
         return chatRepository.deleteChatByChatId(chatId);
 
     }
@@ -189,14 +130,11 @@ public class UserController {
     //modifier chat
     @PostMapping("/updateChat")
     public Chat updateChat(@Valid @ModelAttribute Chat chat, Model model, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return null;
-        }
-        Chat newChat = new Chat(chat.getChatId(), chat.getCreationDate(), chat.getDuration(), chat.getTitle(), chat.getDescription(), chat.getCreatorId());
-        System.out.println(newChat);
-        return chatRepository.saveAndFlush(newChat);
-
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+//        if (connected == null || !connected.toString().equals("true")) {
+//            return null;
+//        }
+        return chatRepository.saveAndFlush(chat);
     }
 
 

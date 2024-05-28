@@ -18,5 +18,29 @@ public class ChatUser implements Serializable {
     @JoinColumn(name="chatId")
     Chat chat;
 
+    public ChatUser(User newUser, Chat newChat){
+        user = newUser;
+        chat = newChat;
+    }
 
+
+    public ChatUser() {
+
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
 }

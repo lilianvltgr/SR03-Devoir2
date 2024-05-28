@@ -10,11 +10,7 @@ import java.util.List;
 Cette interface déclare les méthodes customisées pour la gestion de la bdd spécifique à ce projet
  */
 // Utilisez l'interface, pas la classe
-public interface UserRepositoryCustom {
-    List<User> findAdminOnly();
-    List<Chat> findChatsCreatedBy(long userId);
-    List<User> findUsersInChat(long chatId);
+public interface ChatUserRepositoryCustom {
 
-    boolean addUser(boolean admin, String lastname, String firstname, String mail, String password);
-
+    List<User> getUserFromChatUserList(List<ChatUser> chatUserList);
 }

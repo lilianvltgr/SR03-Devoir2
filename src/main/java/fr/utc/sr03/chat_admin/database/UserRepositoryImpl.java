@@ -31,11 +31,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom{
         Query query = entityManager.createQuery("SELECT user FROM ChatUser WHERE chat = :chatId").setParameter("chatId", chatId);
         return query.getResultList();
     }
-    @Override
-    public List<Chat> findChatsRelatedToUser(long userId){
-        Query query = entityManager.createQuery("SELECT chat FROM ChatUser WHERE user = :userId", User.class).setParameter("userId", userId);
-        return query.getResultList();
-    }
+//    @Override
+//    public List<Chat> findChatsRelatedToUser(long userId){
+//        Query query = entityManager.createQuery("SELECT chat FROM ChatUser WHERE user = :userId", User.class).setParameter("userId", userId);
+//        return query.getResultList();
+//    }
     @Transactional
     @Override
     public boolean addUser(boolean admin, String lastname, String firstname, String mail, String password) {

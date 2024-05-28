@@ -17,8 +17,7 @@ public class Chat {
     String title;
     String description;
 
-    public Chat(long chatId, Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
-        this.chatId = chatId;
+    public Chat(Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
         this.creationDate = creationDate;
         this.duration = dureeValidite;
         this.title = titre;
