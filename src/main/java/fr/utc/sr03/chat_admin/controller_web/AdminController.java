@@ -17,6 +17,10 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 
 @Controller
 @RequestMapping("/AdminController")
@@ -167,11 +171,22 @@ public class AdminController {
         if (result.hasErrors()) {
             return "newUserForm";
         }
+        String regExpn = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!:;,?/.@#$%^&+=])(?=\\S+$).{8,20}$";
+
+        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(user.getPassword());
+
+        if(!matcher.matches()){
+            FieldError password = new FieldError("user", "password", "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial");
+            result.addError(password);
+            return "newUserForm";
+
+        }
+
         Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
         if (existingUser.isPresent()) {
-            FieldError mail = new FieldError("objectName", "mail", "Email Already used");
+            FieldError mail = new FieldError("user", "mail", "Un utilisateur possède déjà cet email.");
             result.addError(mail);
-            System.out.println(result.getFieldError("mail"));
         } else {
             userRepository.saveAndFlush(user);
             model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());

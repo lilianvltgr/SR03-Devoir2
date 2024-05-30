@@ -1,7 +1,12 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
-
+<style>
+    span.error {
+        background-color: pink;
+        color:red;
+    }
+</style>
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -39,19 +44,23 @@
         <form action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
             <label for="lastname">Nom :</label>
             <input type="text" id="lastname" name="lastname" th:field="*{lastname}">
-            <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}">Erreur Nom</span>
+            <br th:if="${#fields.hasErrors('lastname')}">
+            <span class="error" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"> Erreur Nom</span>
             <br>
             <label for="firstname">Prénom :</label>
-            <input type="text" id="firstname" name="firstname" required th:field="*{firstname}">
-            <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}">Erreur Prénom</span>
+            <input type="text" id="firstname" name="firstname"  th:field="*{firstname}">
+            <br th:if="${#fields.hasErrors('firstname')}">
+            <span class="error" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"> <br> Erreur Prénom</span>
             <br>
             <label for="email">Email :</label>
-            <input type="email" id="email" name="mail" required th:field="*{mail}">
-            <span th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}">Erreur mail</span>
+            <input type="email" id="email" name="mail" th:field="*{mail}">
+            <br th:if="${#fields.hasErrors('mail')}">
+            <span class="error" th:if="${#fields.hasErrors('mail')}" th:errors="*{mail}"> <br> Erreur mail</span>
             <br>
             <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required th:field="*{password}">
-            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:text="${'password'}">Erreur Mot de Passe</span>
+            <input type="password" id="password" name="password" th:field="*{password}">
+            <br th:if="${#fields.hasErrors('password')}">
+            <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}" th:text="${'password'}"> <br> Erreur Mot de Passe</span>
             <br>
             <label for="admin">Administrateur :</label>
             <input type="checkbox" id="admin" name="admin">

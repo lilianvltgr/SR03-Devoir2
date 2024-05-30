@@ -18,18 +18,19 @@ public class User {
     @Column(name = "active")
     boolean active;
     @Column(name = "lastname")
-    @Size(min = 2)
-    @NotEmpty(message = "lastname obligatoire")
+    @Size(min = 2, message = "Le nom doit comporter au moins 2 caractères ")
+    @NotEmpty(message = "Nom obligatoire")
     String lastname;
     @Column(name = "firstname")
-    @Size(min = 2)
-    @NotEmpty(message = "firstname obligatoire")
+    @Size(min = 2, message = "Le prénom doit comporter au moins 2 caractères ")
+    @NotEmpty(message = "Prénom obligatoire")
     String firstname;
     @Column(name = "mail")
     @NotEmpty(message = "mail obligatoire")
     String mail;
+    @Column(name = "password")
     @NotEmpty(message = "mot de passe obligatoire")
-    @Size(min = 8)
+    @Size(min = 8, message = "Le mot de passe doit comporter au moins 8 caractères")
     String password;
 
     public User(boolean admin, boolean actif, String lastname, String firstname, String mail, String password) {
