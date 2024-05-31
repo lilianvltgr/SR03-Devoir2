@@ -31,6 +31,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @Controller
 @ResponseBody
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/UserController")
 public class UserController {
 
