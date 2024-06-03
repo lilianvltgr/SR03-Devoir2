@@ -180,7 +180,6 @@ public class AdminController {
             FieldError password = new FieldError("user", "password", "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial");
             result.addError(password);
             return "newUserForm";
-
         }
 
         Optional<User> existingUser = userRepository.findUserByMail(user.getMail());

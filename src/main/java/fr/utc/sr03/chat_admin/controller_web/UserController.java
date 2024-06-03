@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @GetMapping("/userInfos/{userId}")
-    public User getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
+    public User getUserInfos(@PathVariable Long userId, WebRequest request) {
 //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
 //        if (connected == null || !connected.toString().equals("true")) {
 //            return null;
@@ -60,7 +60,7 @@ public class UserController {
         return null;
     }
 @GetMapping ("/getUsersInChat")
-public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequest request) {
+public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) {
     Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
     if (chat.isPresent()) {
         List<ChatUser> chatUserList = chatUserRepository.findChatUsersByChat(chat.get());
@@ -69,7 +69,7 @@ public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequ
     return null;
 }
     @GetMapping("/addUserToChat")
-    public ChatUser adUserToChat(Model model,@RequestParam Long userId, @RequestParam Long chatId, WebRequest request) {
+    public ChatUser adUserToChat(@RequestParam Long userId, @RequestParam Long chatId, WebRequest request) {
         Optional<User> user = userRepository.findByUserId(userId);
         Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
         System.out.println("user : " + user.isPresent());
@@ -83,7 +83,7 @@ public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequ
     }
 
     @GetMapping("/chatsCreatedBy/{userId}")
-    public List<Chat> getChatsUser(Model model, @PathVariable Long userId, WebRequest request) {
+    public List<Chat> getChatsUser(@PathVariable Long userId, WebRequest request) {
         //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
 //        if (connected == null || !connected.toString().equals("true")) {
 //            return null;
@@ -92,23 +92,16 @@ public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequ
     }
 
     @PostMapping("/createChat")
-    public Chat createChat(@Valid @ModelAttribute Chat chat, Model model, BindingResult result, WebRequest request) {
+    public Chat createChat(Chat chat, WebRequest request) {
 //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
 //        if (connected == null || !connected.toString().equals("true")) {
 //            return null;
 //        } //TODO Gérer la vérification de la connection
-        if (result.hasErrors()) {
-            return null; //TODO Gérer les erreurs de validation
-        }
-//        Time dureeValidite = new Time(45);
-//        Long creatorId = 50L;
-//        Date currentDate = new Date();
-//        Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest",creatorId);
         return chatRepository.save(chat);
     }
 
     @PostMapping("/createChatByHand")
-    public Chat createChatByHand(Model model, WebRequest request) {
+    public Chat createChatByHand(WebRequest request) {
 
         Time dureeValidite = new Time(45);
         Long creatorId = 50L;
@@ -118,18 +111,17 @@ public List<User> getUsersInChat(Model model, @RequestParam Long chatId, WebRequ
     }
 
     @DeleteMapping("/deleteChat/{chatId}")
-    public int deleteChat(Model model, @PathVariable Long chatId, WebRequest request) {
+    public int deleteChat(@PathVariable Long chatId, WebRequest request) {
 //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
 //        if (connected == null || !connected.toString().equals("true")) {
 //            return false;
 //        }
         return chatRepository.deleteChatByChatId(chatId);
-
     }
 
     //modifier chat
     @PostMapping("/updateChat")
-    public Chat updateChat(@Valid @ModelAttribute Chat chat, Model model, WebRequest request) {
+    public Chat updateChat(Chat chat, WebRequest request) {
 //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
 //        if (connected == null || !connected.toString().equals("true")) {
 //            return null;
