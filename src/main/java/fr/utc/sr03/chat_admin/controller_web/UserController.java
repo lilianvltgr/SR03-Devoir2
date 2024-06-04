@@ -59,6 +59,14 @@ public class UserController {
         }
         //no user found
         return null;
+    }   @GetMapping("/getUserByMail")
+    public User getUserByMail(String mail, WebRequest request) {
+        Optional<User> userOptional = userRepository.findUserByMail(mail);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        }
+        //no user found
+        return null;
     }
 @GetMapping ("/getUsersInChat")
 public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) {
