@@ -68,6 +68,7 @@ public class UserController {
         //no user found
         return null;
     }
+@CrossOrigin(origins = "http://localhost:3000")
 @GetMapping ("/getUsersInChat")
 public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) {
     Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
@@ -90,13 +91,9 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
         }
         return null;
     }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/chatsCreatedBy/{userId}")
-    public List<Chat> getChatsUser(@PathVariable Long userId, WebRequest request) {
-        //        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return null;
-//        } //TODO Gérer la vérification de la connection
+    public List<Chat> getChatsUser(WebRequest request, @PathVariable Long userId) {
         return chatRepository.findChatByCreatorId(userId);
     }
 
