@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,6 @@ import org.springframework.web.context.request.WebRequest;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/UserController")
 public class UserController {
-
     private final UserRepository userRepository;
     private final ChatRepository chatRepository;
     private final ChatUserRepository chatUserRepository;
@@ -92,21 +92,28 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
         return chatRepository.findChatByCreatorId(userId);
     }
 
+//    @PostMapping("/createChat")
+//    public Chat createChat(String title, String description, Integer duration, Integer creatorId, WebRequest request) {
+//
+//        System.out.println("title : "+ title);
+//        System.out.println("creatorId : "+ creatorId);
+//        LocalDateTime currentDate = LocalDateTime.now();
+//        Long creatorIdLong = Long.valueOf(creatorId);
+//        Chat chat = new Chat(currentDate, duration, title, description, creatorIdLong);
+//        return chatRepository.save(chat);
+//    }
     @PostMapping("/createChat")
-    public Chat createChat(Chat chat, WebRequest request) {
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return null;
-//        } //TODO Gérer la vérification de la connection
+    public Chat createChat(@RequestBody Chat chat, WebRequest request) {
         return chatRepository.save(chat);
     }
 
     @PostMapping("/createChatByHand")
     public Chat createChatByHand(WebRequest request) {
 
-        Time dureeValidite = new Time(45);
+        Integer dureeValidite = 45;
         Long creatorId = 50L;
-        Date currentDate = new Date();
+//        Date currentDate = new Date();
+        LocalDateTime currentDate = LocalDateTime.now();
         Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest", creatorId);
         return chatRepository.save(chat);
     }

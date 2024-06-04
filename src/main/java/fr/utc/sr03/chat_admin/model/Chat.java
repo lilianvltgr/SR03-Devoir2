@@ -4,22 +4,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Date;
 @Entity
 @Table(name = "sr03_chats")
 public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long chatId;
-    long creatorId;
-    Date creationDate;
-    Time duration;
+    Long chatId;
+    Long creatorId;
+    LocalDateTime creationDate;
+    Integer duration;
     String title;
     String description;
 
-    public Chat(Date creationDate, Time dureeValidite, String titre, String description, long creatorId) {
+    public Chat(LocalDateTime creationDate, Integer duration, String titre, String description, Long creatorId) {
         this.creationDate = creationDate;
-        this.duration = dureeValidite;
+        this.duration = duration;
         this.title = titre;
         this.description = description;
         this.creatorId = creatorId;
@@ -32,24 +33,24 @@ public class Chat {
         return chatId;
     }
 
-    public void setChatId(int chatId) {
+    public void setChatId(Long chatId) {
         this.chatId = chatId;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Time getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(Time dureeValidite) {
-        this.duration = dureeValidite;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 
     public String getTitle() {
