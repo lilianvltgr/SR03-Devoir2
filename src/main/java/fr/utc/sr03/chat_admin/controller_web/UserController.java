@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -95,6 +96,19 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
     @GetMapping("/chatsCreatedBy/{userId}")
     public List<Chat> getChatsUser(WebRequest request, @PathVariable Long userId) {
         return chatRepository.findChatByCreatorId(userId);
+    } @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/InvitedChatsFor/{userId}")
+    public List<Chat> getInvitedChatsFor(WebRequest request, @PathVariable Long userId) {
+        Optional<User> user = userRepository.findByUserId(userId);
+        if (user.isPresent()) {
+            List<Chat> chats = new ArrayList<>();
+            List<ChatUser> listChatUsers = chatUserRepository.findChatUserByUser(user.get());
+            for (ChatUser chatUser : listChatUsers)
+                if(chatUser.getChat().getCreatorId() != userId)
+                    chats.add(chatUser.getChat());
+            return chats;
+        }
+        return null;
     }
 
 //    @PostMapping("/createChat")
