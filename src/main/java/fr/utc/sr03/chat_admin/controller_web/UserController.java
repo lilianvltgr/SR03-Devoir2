@@ -60,7 +60,9 @@ public class UserController {
         }
         //no user found
         return null;
-    }   @GetMapping("/getUserByMail")
+    }
+
+    @GetMapping("/getUserByMail")
     public User getUserByMail(String mail, WebRequest request) {
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         if (userOptional.isPresent()) {
@@ -69,23 +71,28 @@ public class UserController {
         //no user found
         return null;
     }
-@CrossOrigin(origins = "http://localhost:3000")
-@GetMapping ("/getUsersInChat")
-public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) {
-    Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
-    if (chat.isPresent()) {
-        List<ChatUser> chatUserList = chatUserRepository.findChatUsersByChat(chat.get());
-        return chatUserRepository.getUserFromChatUserList(chatUserList);
+
+    @GetMapping("/getAllActiveUsers")
+    public List<User> getAllActiveUsers() {
+        return userRepository.findAllByActive(true);
     }
-    return null;
-}
-    @GetMapping("/addUserToChat")
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/getUsersInChat/{chatId}")
+    public List<User> getUsersInChat(@PathVariable Long chatId, WebRequest request) {
+        Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
+        if (chat.isPresent()) {
+            List<ChatUser> chatUserList = chatUserRepository.findChatUsersByChat(chat.get());
+            return chatUserRepository.getUserFromChatUserList(chatUserList);
+        }
+        return null;
+    }
+    @CrossOrigin(origins = "http://localhost:3000")
+
+    @PostMapping("/addUserToChat")
     public ChatUser adUserToChat(@RequestParam Long userId, @RequestParam Long chatId, WebRequest request) {
         Optional<User> user = userRepository.findByUserId(userId);
         Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
-        System.out.println("user : " + user.isPresent());
-        System.out.println("chat : " + chat.isPresent());
-
         if (user.isPresent() && chat.isPresent()) {
             ChatUser chatUser = new ChatUser(user.get(), chat.get());
             return chatUserRepository.saveAndFlush(chatUser);
@@ -93,10 +100,27 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
         return null;
     }
     @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/addUsersToChat")
+    public void adUserToChat(@RequestParam List<Long> userIds, @RequestParam Long chatId) {
+        Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
+        if (chat.isPresent()) {
+            for (Long userId : userIds) {
+                Optional<User> user = userRepository.findByUserId(userId);
+                if (user.isPresent()) {
+                    ChatUser chatUser = new ChatUser(user.get(), chat.get());
+                    chatUserRepository.saveAndFlush(chatUser);
+                }
+            }
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/chatsCreatedBy/{userId}")
     public List<Chat> getChatsUser(WebRequest request, @PathVariable Long userId) {
         return chatRepository.findChatByCreatorId(userId);
-    } @CrossOrigin(origins = "http://localhost:3000")
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/InvitedChatsFor/{userId}")
     public List<Chat> getInvitedChatsFor(WebRequest request, @PathVariable Long userId) {
         Optional<User> user = userRepository.findByUserId(userId);
@@ -104,23 +128,13 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
             List<Chat> chats = new ArrayList<>();
             List<ChatUser> listChatUsers = chatUserRepository.findChatUserByUser(user.get());
             for (ChatUser chatUser : listChatUsers)
-                if(chatUser.getChat().getCreatorId() != userId)
+                if (chatUser.getChat().getCreatorId() != userId)
                     chats.add(chatUser.getChat());
             return chats;
         }
         return null;
     }
 
-//    @PostMapping("/createChat")
-//    public Chat createChat(String title, String description, Integer duration, Integer creatorId, WebRequest request) {
-//
-//        System.out.println("title : "+ title);
-//        System.out.println("creatorId : "+ creatorId);
-//        LocalDateTime currentDate = LocalDateTime.now();
-//        Long creatorIdLong = Long.valueOf(creatorId);
-//        Chat chat = new Chat(currentDate, duration, title, description, creatorIdLong);
-//        return chatRepository.save(chat);
-//    }
     @PostMapping("/createChat")
     public Chat createChat(@RequestBody Chat chat, WebRequest request) {
         return chatRepository.save(chat);
@@ -136,17 +150,20 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
         Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest", creatorId);
         return chatRepository.save(chat);
     }
+
     @DeleteMapping("/deleteChat/{chatId}")
     public int deleteChat(@PathVariable Long chatId) {
         return chatRepository.deleteChatByChatId(chatId);
     }
+
     @DeleteMapping("/deleteChatUser/{chatId}")
     public void deleteChatUser(@PathVariable Long chatId) {
         Optional<Chat> optionalChat = chatRepository.findChatsByChatId(chatId);
-        if(optionalChat.isPresent()){
+        if (optionalChat.isPresent()) {
             chatUserRepository.deleteChatUsersByChat(optionalChat.get());
         }
     }
+
 
     //modifier chat
     @PostMapping("/updateChat")

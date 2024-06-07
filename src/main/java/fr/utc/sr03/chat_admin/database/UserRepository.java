@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
     //Page<User> findByLastNameContainingIgnoreCase(String lastname);
 
     Optional<User> findUserByMail (String mail);
+    List<User> findAllByActive (boolean active);
 
     Page<User> findByLastnameContainingIgnoreCase(String lastname, Pageable pageable);
     Page<User> findByActiveFalseAndLastnameContainingIgnoreCase(String lastname, Pageable pageable);
