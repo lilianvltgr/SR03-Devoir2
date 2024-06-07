@@ -136,25 +136,22 @@ public List<User> getUsersInChat(@RequestParam Long chatId, WebRequest request) 
         Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest", creatorId);
         return chatRepository.save(chat);
     }
-
     @DeleteMapping("/deleteChat/{chatId}")
-    public int deleteChat(@PathVariable Long chatId, WebRequest request) {
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return false;
-//        }
+    public int deleteChat(@PathVariable Long chatId) {
         return chatRepository.deleteChatByChatId(chatId);
+    }
+    @DeleteMapping("/deleteChatUser/{chatId}")
+    public void deleteChatUser(@PathVariable Long chatId) {
+        Optional<Chat> optionalChat = chatRepository.findChatsByChatId(chatId);
+        if(optionalChat.isPresent()){
+            chatUserRepository.deleteChatUsersByChat(optionalChat.get());
+        }
     }
 
     //modifier chat
     @PostMapping("/updateChat")
     public Chat updateChat(Chat chat, WebRequest request) {
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return null;
-//        }
         return chatRepository.saveAndFlush(chat);
     }
-
 
 }
