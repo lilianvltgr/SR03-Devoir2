@@ -11,6 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -175,6 +178,12 @@ public class UserController {
     @PostMapping("/updateChat")
     public Chat updateChat(Chat chat, WebRequest request) {
         return chatRepository.saveAndFlush(chat);
+    }
+
+    @MessageMapping("/chat/{chatId}/sendMessage")
+    @SendTo("/topic/messages/{chatId}")
+    public String processMessage(@DestinationVariable String chatId, String message) {
+        return message;
     }
 
 }
