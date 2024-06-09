@@ -31,8 +31,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 
-@Controller
-@ResponseBody
+@RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/UserController")
 public class UserController {
@@ -87,6 +86,7 @@ public class UserController {
         }
         return null;
     }
+
     @CrossOrigin(origins = "http://localhost:3000")
 
     @PostMapping("/addUserToChat")
@@ -99,6 +99,7 @@ public class UserController {
         }
         return null;
     }
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/addUsersToChat")
     public void adUserToChat(@RequestParam List<Long> userIds, @RequestParam Long chatId) {
@@ -107,6 +108,7 @@ public class UserController {
             for (Long userId : userIds) {
                 Optional<User> user = userRepository.findByUserId(userId);
                 if (user.isPresent()) {
+                    System.out.println("adding user" + userId + "to chat" + chatId);
                     ChatUser chatUser = new ChatUser(user.get(), chat.get());
                     chatUserRepository.saveAndFlush(chatUser);
                 }
@@ -140,17 +142,6 @@ public class UserController {
         return chatRepository.save(chat);
     }
 
-    @PostMapping("/createChatByHand")
-    public Chat createChatByHand(WebRequest request) {
-
-        Integer dureeValidite = 45;
-        Long creatorId = 50L;
-//        Date currentDate = new Date();
-        LocalDateTime currentDate = LocalDateTime.now();
-        Chat chat = new Chat(currentDate, dureeValidite, "test", "descriptionTest", creatorId);
-        return chatRepository.save(chat);
-    }
-
     @DeleteMapping("/deleteChat/{chatId}")
     public int deleteChat(@PathVariable Long chatId) {
         return chatRepository.deleteChatByChatId(chatId);
@@ -164,6 +155,21 @@ public class UserController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/deleteChatUsers")
+    public void deleteChatUsers(@RequestParam List<Long> userIds, @RequestParam Long chatId) {
+        Optional<Chat> optionalChat = chatRepository.findChatsByChatId(chatId);
+        if (optionalChat.isPresent()) {
+            Chat chat = optionalChat.get();
+            for (Long userId : userIds) {
+                Optional<User> optionalUser = userRepository.findByUserId(userId);
+                if (optionalUser.isPresent()) {
+                    chatUserRepository.deleteChatUsersByChatAndUser(chat, optionalUser.get());
+                }
+            }
+
+        }
+    }
 
     //modifier chat
     @PostMapping("/updateChat")

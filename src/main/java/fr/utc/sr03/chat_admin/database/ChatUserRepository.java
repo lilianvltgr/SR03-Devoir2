@@ -14,5 +14,7 @@ public interface ChatUserRepository extends JpaRepository<ChatUser,Integer>, Cha
     List<ChatUser> findChatUserByUser(User user);
     @Transactional
     void deleteChatUsersByChat(Chat chat);
+    @Transactional
+    void deleteChatUsersByChatAndUser(Chat chat, User user);
 
 }
