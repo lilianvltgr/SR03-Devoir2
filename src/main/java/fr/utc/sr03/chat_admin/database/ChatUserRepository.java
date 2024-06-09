@@ -11,5 +11,10 @@ import java.util.List;
 public interface ChatUserRepository extends JpaRepository<ChatUser,Integer>, ChatUserRepositoryCustom {
 
     List<ChatUser> findChatUsersByChat(Chat chat);
+    List<ChatUser> findChatUserByUser(User user);
+    @Transactional
+    void deleteChatUsersByChat(Chat chat);
+    @Transactional
+    void deleteChatUsersByChatAndUser(Chat chat, User user);
 
 }
