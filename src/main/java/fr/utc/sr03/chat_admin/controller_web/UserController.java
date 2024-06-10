@@ -51,11 +51,6 @@ public class UserController {
 
     @GetMapping("/userInfos/{userId}")
     public User getUserInfos(@PathVariable Long userId, WebRequest request) {
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return null;
-//        }
-        // throw error if there is no connexion ??
         Optional<User> userOptional = userRepository.findByUserId(userId);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -180,10 +175,10 @@ public class UserController {
         return chatRepository.saveAndFlush(chat);
     }
 
-    @MessageMapping("/chat/{chatId}/sendMessage")
-    @SendTo("/topic/messages/{chatId}")
-    public String processMessage(@DestinationVariable String chatId, String message) {
-        return message;
-    }
+//    @MessageMapping("/chat/{chatId}/sendMessage")
+//    @SendTo("/topic/messages/{chatId}")
+//    public String processMessage(@DestinationVariable String chatId, String message) {
+//        return message;
+//    }
 
 }
