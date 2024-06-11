@@ -11,11 +11,11 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 public class WebSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketHandler.class);
-
     private final String wsServerName;
     private final List<WebSocketSession> sessions;
     private final List<MessageSocket> messageSocketsHistory;
@@ -35,6 +35,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws IOException {
         LOGGER.info(session.getId());
+
 
         // Ajout de la nouvelle session a la liste
         sessions.add(session);
@@ -75,23 +76,29 @@ public class WebSocketHandler extends TextWebSocketHandler {
         System.out.println("Received msg: " + receivedMessage);
         try {
             MessageSocket messageSocket = mapper.readValue(receivedMessage, MessageSocket.class);
-            System.out.println(3);
+
             // Pour stocker le message dans l'historique
             messageSocketsHistory.add(messageSocket);
-            // Envoi du message à tous les connectes
-            this.broadcast(messageSocket.getUser() + " : " + messageSocket.getMessage());
-        } catch (Exception e) {
+            System.out.println("Message socket "+messageSocket);
 
+            // Envoi du message à tous les connectes
+            this.broadcast(messageSocket.getUser() + " : " + messageSocket.getMessage(), messageSocket.getChatId());
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         ;
-
     }
 
-    public void broadcast(String message) throws IOException {
+    public void broadcast(String message, String chatId) throws IOException {
         // Envoi du message a toutes les sessions
-        // A modifier pour envoyer le message a toutes les sessions d'un seul chat
         for (WebSocketSession session : sessions) {
+            String uri = session.getUri().toString();
+            System.out.println("uri : "+uri);
+
+            String chatIdSession = uri.split("hat/")[1].toString();
+
+            if(chatId.equals(chatIdSession))
+                System.out.println("Message envoyé pour la session "+chatIdSession);
             session.sendMessage(new TextMessage(message));
         }
     }
