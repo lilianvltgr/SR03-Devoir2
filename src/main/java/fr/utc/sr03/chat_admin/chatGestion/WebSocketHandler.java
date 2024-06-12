@@ -35,15 +35,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws IOException {
         LOGGER.info(session.getId());
-
+        System.out.println("ajout de la sessison" + session.getUri());
 
         // Ajout de la nouvelle session a la liste
         sessions.add(session);
 
         // Historique des messages
-        for (MessageSocket messageSocket : messageSocketsHistory) {
-            session.sendMessage(new TextMessage(messageSocket.getUser() + " : " + messageSocket.getMessage()));
-        }
+//        for (MessageSocket messageSocket : messageSocketsHistory) {
+//            session.sendMessage(new TextMessage(messageSocket.getUser() + " : " + messageSocket.getMessage()));
+//        }
 
         LOGGER.info("Connexion etablie sur " + this.wsServerName);
     }
@@ -58,7 +58,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         // Suppression de la session a la liste
         sessions.remove(session);
-
         LOGGER.info("Deconnexion de " + this.wsServerName);
     }
 
@@ -70,17 +69,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
      * @throws IOException
      */
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message)  {
+    public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) {
         ObjectMapper mapper = new ObjectMapper();
         String receivedMessage = (String) message.getPayload();
         System.out.println("Received msg: " + receivedMessage);
         try {
             MessageSocket messageSocket = mapper.readValue(receivedMessage, MessageSocket.class);
-
             // Pour stocker le message dans l'historique
             messageSocketsHistory.add(messageSocket);
-            System.out.println("Message socket "+messageSocket);
-
             // Envoi du message à tous les connectes
             this.broadcast(messageSocket.getUser() + " : " + messageSocket.getMessage(), messageSocket.getChatId());
         } catch (Exception e) {
@@ -92,14 +88,17 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void broadcast(String message, String chatId) throws IOException {
         // Envoi du message a toutes les sessions
         for (WebSocketSession session : sessions) {
-            String uri = session.getUri().toString();
-            System.out.println("uri : "+uri);
+            if (session != null) {
 
-            String chatIdSession = uri.split("hat/")[1].toString();
+                String uri = session.getUri().toString();
 
-            if(chatId.equals(chatIdSession))
-                System.out.println("Message envoyé pour la session "+chatIdSession);
-            session.sendMessage(new TextMessage(message));
+                String chatIdSession = uri.split("hat/")[1].toString();
+                if (chatId.equals(chatIdSession)) {
+                    System.out.println("chatIdSession : " + chatIdSession);
+                    System.out.println("Message envoyé pour la session " + session.getId());
+                    session.sendMessage(new TextMessage(message));
+                }
+            }
         }
     }
 }
