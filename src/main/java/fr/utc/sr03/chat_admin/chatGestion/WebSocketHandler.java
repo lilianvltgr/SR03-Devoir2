@@ -78,25 +78,42 @@ public class WebSocketHandler extends TextWebSocketHandler {
             // Pour stocker le message dans l'historique
             messageSocketsHistory.add(messageSocket);
             // Envoi du message à tous les connectes
-            this.broadcast(messageSocket.getUser() + " : " + messageSocket.getMessage(), messageSocket.getChatId());
+            this.broadcast(messageSocket,messageSocket.getChatId());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         ;
     }
 
-    public void broadcast(String message, String chatId) throws IOException {
-        // Envoi du message a toutes les sessions
+
+//    public void broadcast(String message, String chatId) throws IOException {
+//        // Envoi du message a toutes les sessions
+//        for (WebSocketSession session : sessions) {
+//            if (session != null) {
+//
+//                String uri = session.getUri().toString();
+//
+//                String chatIdSession = uri.split("hat/")[1].toString();
+//                if (chatId.equals(chatIdSession)) {
+//                    System.out.println("chatIdSession : " + chatIdSession);
+//                    System.out.println("Message envoyé pour la session " + session.getId());
+//                    session.sendMessage(new TextMessage(message));
+//                }
+//            }
+//        }
+//    }
+
+    public void broadcast(MessageSocket messageSocket, String chatId) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String messageJson = mapper.writeValueAsString(messageSocket);
+
         for (WebSocketSession session : sessions) {
             if (session != null) {
-
                 String uri = session.getUri().toString();
-
-                String chatIdSession = uri.split("hat/")[1].toString();
+                String chatIdSession = uri.split("chat/")[1];
                 if (chatId.equals(chatIdSession)) {
-                    System.out.println("chatIdSession : " + chatIdSession);
-                    System.out.println("Message envoyé pour la session " + session.getId());
-                    session.sendMessage(new TextMessage(message));
+                    System.out.println("Sending message to session " + session.getId());
+                    session.sendMessage(new TextMessage(messageJson));
                 }
             }
         }
