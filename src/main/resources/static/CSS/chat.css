@@ -29,7 +29,7 @@ button {
     background-color: white;
     border-radius: 10px;
     color: black;
-    font-family: 'Tahoma';
+    font-family: 'Tahoma', serif;
     font-size: 1rem; /* Taille de police plus grande */
     padding: 10px 40px ; /* Augmentation de la marge intérieure pour un bouton plus grand */
 

@@ -27,7 +27,6 @@ public class Chat {
 
     }
     public Chat() {}
-    //region setters and getters
 
     public long getChatId() {
         return chatId;
@@ -76,8 +75,6 @@ public class Chat {
     public void setCreatorId(long creatorId) {
         this.creatorId = creatorId;
     }
-//endregion
-
     public static void main(String[] args) {
 
     }

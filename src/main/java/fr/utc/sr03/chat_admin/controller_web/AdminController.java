@@ -9,29 +9,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.WebRequest;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.hibernate.validator.internal.util.Contracts.assertTrue;
-
 @Controller
 @RequestMapping("/AdminController")
 public class AdminController {
     private final UserRepository userRepository;
-
     @Autowired
     private AdminController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
     @GetMapping("/users")
     public String getUserList(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
@@ -66,7 +59,6 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        // Init du tri
         Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
         switch (sort.orElse(0)) {
             case 0:
@@ -139,29 +131,6 @@ public class AdminController {
         return "AdminHomePage";
     }
 
-//    @PostMapping("/addUser")
-//    public String addUser(@ModelAttribute @Valid User user, Model model,
-//                          BindingResult result , WebRequest request) {
-//
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-//        if (connected == null || !connected.toString().equals("true")) {
-//            return "AuthentificationAdmin";
-//        }
-//        if (result.hasErrors()) {
-//            return "newUserForm";
-//        }
-//
-//        Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
-//        if (existingUser.isPresent()) {
-//            ObjectError mail = new ObjectError("mail", "Email Already used");
-//            result.addError(mail);
-//            System.out.println("même e-mail");
-//        } else {
-//            userRepository.saveAndFlush(user);
-//            model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
-//        }
-//        return "newUserForm";
-//    }
     @PostMapping("/addUser")
     public String postTruc(@ModelAttribute @Valid User user, BindingResult result, Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
@@ -171,9 +140,9 @@ public class AdminController {
         if (result.hasErrors()) {
             return "newUserForm";
         }
-        String regExpn = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!:;,?/.@#$%^&+=])(?=\\S+$).{8,20}$";
+        String regExp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!:;,?/.@#$%^&+=])(?=\\S+$).{8,20}$";
 
-        Pattern pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(regExp, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(user.getPassword());
 
         if(!matcher.matches()){
@@ -198,7 +167,6 @@ public class AdminController {
                           @RequestParam("password") String password,
                           @RequestParam("email") String email) {
         List<User> users = userRepository.findAll();
-        List<User> filteredUsers;
         for (User entry : users) {
             if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
                 model.addAttribute("currentAdmin", email);
@@ -212,13 +180,11 @@ public class AdminController {
         }
         model.addAttribute("authFailed", true);
         return "AuthentificationAdmin";
-        //Connexion Invalide
     }
 
     @GetMapping("/getAdmins")
     private List<User> getAdmins() {
-        List<User> admins = userRepository.findAdminOnly();
-        return admins;
+        return userRepository.findAdminOnly();
     }
 
     @GetMapping("/getAdminsTemplate")
@@ -238,7 +204,7 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        Integer deleted = userRepository.deleteByUserId(userId);
+        userRepository.deleteByUserId(userId);
         return getUserList(model, request);
     }
 
@@ -265,8 +231,7 @@ public class AdminController {
 
     @PostMapping("/updatePassword")
     public String updatePassword(@RequestParam("mail") String mail,
-                                 @RequestParam("newPassword") String newPassword,
-                                 Model model, WebRequest request) {
+                                 @RequestParam("newPassword") String newPassword, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
@@ -295,7 +260,6 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "AuthentificationAdmin";
         }
-        // Init du tri
         Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
         switch (sort.orElse(0)) {
             case 0:
@@ -305,7 +269,6 @@ public class AdminController {
                 sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "lastname");
                 break;
         }
-        // Recup des users
         Page<User> users = userRepository.findByLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 2, sortCriteria));
         model.addAttribute("users", users.getContent());
         model.addAttribute("current_page", page.orElse(0));
@@ -315,14 +278,5 @@ public class AdminController {
         model.addAttribute("userPage", users);
         return "userList";
     }
-
-    //////
-    @GetMapping("/truc")
-    public String getTruc(Model model, WebRequest request) {
-        model.addAttribute("user", new User()); // Ajoutez cette ligne pour lier le formulaire
-        return "trucForm";
-    }
-
-
 }
 

@@ -2,7 +2,6 @@ package fr.utc.sr03.chat_admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 @SpringBootApplication
 public class ChatAdminApplication {
 	public static void main(String[] args) {
@@ -10,3 +9,5 @@ public class ChatAdminApplication {
 	}
 
 }
+
+

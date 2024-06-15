@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
     <title>Page de Profil</title>
     <link rel="stylesheet" href="../static/CSS/adminHomePage.css">
@@ -8,22 +8,16 @@
 </head>
 <body>
 <h1>Page de Profil</h1>
-
-<!-- Afficher les messages de succès ou d'erreur -->
 <div th:if="${updateSuccess}">
     <div style="color: green;" th:text="${updateSuccess}"></div>
 </div>
 <div th:if="${updateError}">
     <div style="color: red;" th:text="${updateError}"></div>
 </div>
-
-<!-- Formulaire de mise à jour du mot de passe -->
 <form action="/AdminController/updatePassword" method="post">
     <input type="email" name="mail" placeholder="Entrez votre email" required>
     <input type="password" name="newPassword" placeholder="Nouveau mot de passe" required>
     <button type="submit">Mettre à jour le mot de passe</button>
-
 </form>
-
 </body>
 </html>

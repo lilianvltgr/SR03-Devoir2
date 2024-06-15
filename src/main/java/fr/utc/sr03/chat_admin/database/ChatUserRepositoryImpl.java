@@ -1,11 +1,9 @@
 package fr.utc.sr03.chat_admin.database;
-
 import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +11,6 @@ import java.util.List;
 public class ChatUserRepositoryImpl implements ChatUserRepositoryCustom{
     @PersistenceContext
     EntityManager entityManager;
-
-
     @Override
     public List<User> getUserFromChatUserList(List<ChatUser> chatUserList){
         List<User> userList = new ArrayList<>();
@@ -23,5 +19,4 @@ public class ChatUserRepositoryImpl implements ChatUserRepositoryCustom{
         }
         return userList;
     }
-
 }

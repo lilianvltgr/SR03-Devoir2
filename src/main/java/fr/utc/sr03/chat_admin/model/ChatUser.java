@@ -23,11 +23,9 @@ public class ChatUser implements Serializable {
         chat = newChat;
     }
 
-
     public ChatUser() {
 
     }
-
     public User getUser() {
         return user;
     }

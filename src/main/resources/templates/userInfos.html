@@ -35,7 +35,7 @@
         <div th:if="${userUpdated}" style="background-color: darkseagreen">
             <span> Les informations de l'utilisateur ont été modifiées</span><br>
         </div>
-        <form action="/AdminController/update" method="POST" onsubmit= "return validateNewUserForm()">
+        <form action="/AdminController/update" method="POST" onsubmit="return validateNewUserForm()">
             <label for="lastname">Nom :</label>
             <input type="text" id="lastname" name="lastname" required th:value="${userInfos.getLastname()}">
             <br>
@@ -52,13 +52,11 @@
             <br>
             <label for="admin">Administrateur :</label>
             <input type="checkbox" id="admin" name="admin" th:checked="${userInfos.getAdmin()}">
-
             <br>
             <label for="admin">Actif :</label>
             <input type="checkbox" id="active" name="active" th:checked="${userInfos.isActive()}">
             <br>
-
-            <button type="submit">Mettre à jour l'utilisateur </button>
+            <button type="submit">Mettre à jour l'utilisateur</button>
         </form>
     </div>
 </div>

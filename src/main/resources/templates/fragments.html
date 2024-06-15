@@ -15,6 +15,7 @@
     <script type="module">
         import '@material/web/all.js';
         import {styles as typescaleStyles} from '@material/web/typography/md-typescale-styles.js';
+
         document.adoptedStyleSheets.push(typescaleStyles.styleSheet);
     </script>
     <title></title>
@@ -23,29 +24,30 @@
 <div class="container">
     <div th:fragment="sideBar">
         <div class="sidebar">
-        <h2>Menu</h2>
-            <md-fab label="Accueil" id="HomePage" ></md-fab><br><br>
-
-        <md-fab label="Ajouter un utilisateur" id="addUser" ></md-fab><br><br>
-        <md-fab label="Utilisateurs desactives" id="desactives" ></md-fab><br><br>
-        <md-fab label="Utilisateurs" id="utilisateurs" ></md-fab><br><br>
-        <script>
-            document.getElementById('HomePage').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController';
-            });
-            document.getElementById('addUser').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/getUserForm';
-            });
-            document.getElementById('desactives').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/inactiveUsers';
-            });
-            document.getElementById('utilisateurs').addEventListener('click', function() {
-                window.location.href = 'http://localhost:8080/AdminController/usersPage';
-            });
-        </script>
-    </div>
-    </div>
-    <div class="content">
+            <h2>Menu</h2>
+            <md-fab label="Accueil" id="HomePage"></md-fab>
+            <br><br>
+            <md-fab label="Ajouter un utilisateur" id="addUser"></md-fab>
+            <br><br>
+            <md-fab label="Utilisateurs desactives" id="desactives"></md-fab>
+            <br><br>
+            <md-fab label="Utilisateurs" id="utilisateurs"></md-fab>
+            <br><br>
+            <script>
+                document.getElementById('HomePage').addEventListener('click', function () {
+                    window.location.href = 'http://localhost:8080/AdminController';
+                });
+                document.getElementById('addUser').addEventListener('click', function () {
+                    window.location.href = 'http://localhost:8080/AdminController/getUserForm';
+                });
+                document.getElementById('desactives').addEventListener('click', function () {
+                    window.location.href = 'http://localhost:8080/AdminController/inactiveUsers';
+                });
+                document.getElementById('utilisateurs').addEventListener('click', function () {
+                    window.location.href = 'http://localhost:8080/AdminController/usersPage';
+                });
+            </script>
+        </div>
     </div>
 </div>
 </body>

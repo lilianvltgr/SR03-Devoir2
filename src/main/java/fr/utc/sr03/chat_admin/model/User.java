@@ -43,78 +43,51 @@ public class User {
     }
 
     public User() {
-        // constructeur sans argument demandé
     }
-
     //region setters and getters
     public boolean getAdmin() {
         return admin;
     }
-
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
-
     public boolean isActive() {
         return active;
     }
-
     public void setActive(boolean actif) {
         this.active = actif;
     }
-
     public long getUserId() {
         return userId;
     }
-
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
     public String getLastname() {
         return lastname;
     }
-
     public void setLastname(String nom) {
         this.lastname = nom;
     }
-
     public String getFirstname() {
         return firstname;
     }
-
     public void setFirstname(String prenom) {
         this.firstname = prenom;
     }
-
     public String getMail() {
         return mail;
     }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
-
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String passWord) {
         this.password = passWord;
     }
-
     //endregion
-
-
     public static void main(String[] args) {
-        User user = new User(true, true,  "Voltigeur", "Lilian", "lilian.voltigeur@etu.utc.fr", "testestest");
-        System.out.println("Informations de l'utilisateur :");
-        System.out.println("Nom : " + user.getLastname());
-        System.out.println("Prénom : " + user.getFirstname());
-        System.out.println("Adresse e-mail : " + user.getMail());
-        System.out.println("ID : " + user.getUserId());
-        System.out.println("Mot de passe : " + user.getPassword());
-
     }
-
 }

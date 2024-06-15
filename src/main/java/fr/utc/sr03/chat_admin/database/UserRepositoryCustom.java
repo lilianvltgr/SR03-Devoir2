@@ -5,16 +5,11 @@ import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
 
 import java.util.List;
-
 /*
 Cette interface déclare les méthodes customisées pour la gestion de la bdd spécifique à ce projet
  */
-// Utilisez l'interface, pas la classe
 public interface UserRepositoryCustom {
     List<User> findAdminOnly();
     List<Chat> findChatsCreatedBy(long userId);
     List<User> findUsersInChat(long chatId);
-
-    boolean addUser(boolean admin, String lastname, String firstname, String mail, String password);
-
 }

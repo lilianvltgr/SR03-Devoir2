@@ -6,33 +6,13 @@ import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.Chat;
 import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.Time;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import fr.utc.sr03.chat_admin.model.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.WebRequest;
-
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -50,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/userInfos/{userId}")
-    public User getUserInfos(@PathVariable Long userId, WebRequest request) {
+    public User getUserInfos(@PathVariable Long userId) {
         Optional<User> userOptional = userRepository.findByUserId(userId);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -60,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserByMail")
-    public User getUserByMail(String mail, WebRequest request) {
+    public User getUserByMail(String mail) {
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -76,7 +56,7 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getUsersInChat/{chatId}")
-    public List<User> getUsersInChat(@PathVariable Long chatId, WebRequest request) {
+    public List<User> getUsersInChat(@PathVariable Long chatId) {
         Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
         if (chat.isPresent()) {
             List<ChatUser> chatUserList = chatUserRepository.findChatUsersByChat(chat.get());
@@ -86,9 +66,8 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
-
     @PostMapping("/addUserToChat")
-    public ChatUser adUserToChat(@RequestParam Long userId, @RequestParam Long chatId, WebRequest request) {
+    public ChatUser adUserToChat(@RequestParam Long userId, @RequestParam Long chatId) {
         Optional<User> user = userRepository.findByUserId(userId);
         Optional<Chat> chat = chatRepository.findChatsByChatId(chatId);
         if (user.isPresent() && chat.isPresent()) {
@@ -116,13 +95,13 @@ public class UserController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/chatsCreatedBy/{userId}")
-    public List<Chat> getChatsUser(WebRequest request, @PathVariable Long userId) {
+    public List<Chat> getChatsUser(@PathVariable Long userId) {
         return chatRepository.findChatByCreatorId(userId);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/InvitedChatsFor/{userId}")
-    public List<Chat> getInvitedChatsFor(WebRequest request, @PathVariable Long userId) {
+    public List<Chat> getInvitedChatsFor(@PathVariable Long userId) {
         Optional<User> user = userRepository.findByUserId(userId);
         if (user.isPresent()) {
             List<Chat> chats = new ArrayList<>();
@@ -136,7 +115,7 @@ public class UserController {
     }
 
     @PostMapping("/createChat")
-    public Chat createChat(@RequestBody Chat chat, WebRequest request) {
+    public Chat createChat(@RequestBody Chat chat) {
         return chatRepository.save(chat);
     }
 
@@ -168,17 +147,8 @@ public class UserController {
 
         }
     }
-
-    //modifier chat
     @PostMapping("/updateChat")
-    public Chat updateChat(Chat chat, WebRequest request) {
+    public Chat updateChat(Chat chat) {
         return chatRepository.saveAndFlush(chat);
     }
-
-//    @MessageMapping("/chat/{chatId}/sendMessage")
-//    @SendTo("/topic/messages/{chatId}")
-//    public String processMessage(@DestinationVariable String chatId, String message) {
-//        return message;
-//    }
-
 }
