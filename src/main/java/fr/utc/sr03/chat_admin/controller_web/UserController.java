@@ -6,7 +6,11 @@ import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.Chat;
 import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +18,10 @@ import java.util.Objects;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -62,6 +70,27 @@ public class UserController {
         return -1;
     }
 
+//    @PostMapping("/authentification")
+//    public long authentification(@RequestParam("mail") String mail,
+//                                              @RequestParam("password") String password,
+//                                              HttpServletRequest request,
+//                                              HttpServletResponse response) {
+//        Optional<User> userOptional = userRepository.findUserByMail(mail);
+//        if (userOptional.isPresent()) {
+//            User user = userOptional.get();
+//            if (Objects.equals(user.getPassword(), password)) {
+//                // Création session et configuration cookie
+//                request.getSession().setAttribute("user", user);
+//                Cookie sessionCookie = new Cookie("JSESSIONID", request.getSession().getId());
+//                sessionCookie.setHttpOnly(true);
+//                sessionCookie.setPath("/");
+//                sessionCookie.setSecure(true);
+//                response.addCookie(sessionCookie);
+//                return user.getUserId();
+//            }
+//        }
+//        return -1;
+//    }
     @GetMapping("/getAllActiveUsers")
     public List<User> getAllActiveUsers() {
         return userRepository.findAllByActive(true);
@@ -163,4 +192,6 @@ public class UserController {
     public Chat updateChat(Chat chat) {
         return chatRepository.saveAndFlush(chat);
     }
+
+
 }

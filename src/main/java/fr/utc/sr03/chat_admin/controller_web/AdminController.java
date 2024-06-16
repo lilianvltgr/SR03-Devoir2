@@ -2,6 +2,7 @@ package fr.utc.sr03.chat_admin.controller_web;
 
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -228,6 +229,18 @@ public class AdminController {
         return "authentificationAdmin";
     }
 
+    @GetMapping("/connectedAdmin")
+    public String adminDashboard(HttpServletRequest request, Model model) {
+        User user = (User) request.getSession().getAttribute("user");
+
+        if (user != null) {
+            model.addAttribute("user", user);
+            return "adminHomePage";
+        } else {
+            return "authentificationAdmin";
+        }
+    }
+
     @GetMapping("/getAdmins")
     private List<User> getAdmins() {
         return userRepository.findAdminOnly();
@@ -324,5 +337,7 @@ public class AdminController {
         model.addAttribute("userPage", users);
         return "userList";
     }
+
+
 }
 
