@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -47,6 +48,18 @@ public class UserController {
         }
         //no user found
         return null;
+    }
+
+    @GetMapping("/authentification")
+    public long authentification(String mail, String password) {
+        Optional<User> userOptional = userRepository.findUserByMail(mail);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if(Objects.equals(user.getPassword(), password)){
+                return user.getUserId();
+            }
+        }
+        return -1;
     }
 
     @GetMapping("/getAllActiveUsers")
