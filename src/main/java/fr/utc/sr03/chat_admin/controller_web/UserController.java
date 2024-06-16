@@ -9,7 +9,9 @@ import fr.utc.sr03.chat_admin.model.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.ScrollPosition;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -58,39 +61,45 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/authentification")
-    public long authentification(String mail, String password) {
-        Optional<User> userOptional = userRepository.findUserByMail(mail);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            if(Objects.equals(user.getPassword(), password)){
-                return user.getUserId();
-            }
-        }
-        return -1;
-    }
-
-//    @PostMapping("/authentification")
-//    public long authentification(@RequestParam("mail") String mail,
-//                                              @RequestParam("password") String password,
-//                                              HttpServletRequest request,
-//                                              HttpServletResponse response) {
+//    @GetMapping("/authentification")
+//    public long authentification(String mail, String password) {
 //        Optional<User> userOptional = userRepository.findUserByMail(mail);
 //        if (userOptional.isPresent()) {
 //            User user = userOptional.get();
-//            if (Objects.equals(user.getPassword(), password)) {
-//                // Création session et configuration cookie
-//                request.getSession().setAttribute("user", user);
-//                Cookie sessionCookie = new Cookie("JSESSIONID", request.getSession().getId());
-//                sessionCookie.setHttpOnly(true);
-//                sessionCookie.setPath("/");
-//                sessionCookie.setSecure(true);
-//                response.addCookie(sessionCookie);
+//            if(Objects.equals(user.getPassword(), password)){
 //                return user.getUserId();
 //            }
 //        }
 //        return -1;
 //    }
+
+    @PostMapping("/authentification")
+    public long authentification(@RequestParam("mail") String mail,
+                                              @RequestParam("password") String password,
+                                              WebRequest request,
+                                 HttpSession session
+    ) {
+        Optional<User> userOptional = userRepository.findUserByMail(mail);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            if (Objects.equals(user.getPassword(), password)) {
+                // Création session et configuration cookie
+                request.setAttribute("user", user, WebRequest.SCOPE_SESSION);
+                request.setAttribute("connected", true, WebRequest.SCOPE_SESSION);
+                session.setAttribute("connected", true);
+                session.setAttribute("user", user);
+
+
+//                Cookie sessionCookie = new Cookie("JSESSIONID", request.getSession().getId());
+//                sessionCookie.setHttpOnly(true);
+//                sessionCookie.setPath("/");
+//                sessionCookie.setSecure(true);
+//                response.addCookie(sessionCookie);
+                return user.getUserId();
+            }
+        }
+        return -1;
+    }
     @GetMapping("/getAllActiveUsers")
     public List<User> getAllActiveUsers() {
         return userRepository.findAllByActive(true);

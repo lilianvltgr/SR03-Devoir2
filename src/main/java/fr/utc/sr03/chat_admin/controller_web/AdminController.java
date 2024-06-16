@@ -3,6 +3,7 @@ package fr.utc.sr03.chat_admin.controller_web;
 import fr.utc.sr03.chat_admin.database.UserRepository;
 import fr.utc.sr03.chat_admin.model.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -50,6 +51,7 @@ public class AdminController {
      * Function used to get specific user information and display it.
      * @return a template
      */
+
     @GetMapping("/userInfos/{userId}")
     public String getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
         // Authentification verification
@@ -120,9 +122,12 @@ public class AdminController {
      * @return the home page template
      */
     @GetMapping("")
-    public String goHome(WebRequest request) {
+    public String goHome(WebRequest request, HttpSession session) {
         // Authentification verification
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        System.out.println(session.getAttribute("connected"));
+        System.out.println(session);
+        Object connected = session.getAttribute("connected");
+//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
         }
