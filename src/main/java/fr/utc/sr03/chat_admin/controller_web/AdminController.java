@@ -170,7 +170,7 @@ public class AdminController {
         for (User entry : users) {
             if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
                 model.addAttribute("currentAdmin", email);
-                //TODO ajouter la vérification de la désactivation temporaire du compte
+                model.addAttribute("userId", entry.getUserId());
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
                 request.setAttribute("connected", true, WebRequest.SCOPE_SESSION);
                 System.out.println("connected set");

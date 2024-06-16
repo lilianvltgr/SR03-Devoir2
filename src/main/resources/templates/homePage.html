@@ -58,7 +58,7 @@
         <md-icon slot="icon">admin_panel_settings</md-icon>
     </md-fab>
 
-    <md-fab label="Chats" id="Chats">
+    <md-fab label="Chats" id="Chats" th:value="${userId}">
         <md-icon slot="icon">Chat</md-icon>
     </md-fab>
 
@@ -69,12 +69,17 @@
         document.getElementById('Espace Administrateur').addEventListener('click', function () {
             window.location.href = 'http://localhost:8080/AdminController/redirectAuth';
         });
-        document.getElementById('Chats').addEventListener('click', function () {
-            window.location.href = 'http://localhost:8080/ChatsController';
-        });
+
         document.getElementById('Deconnexion').addEventListener('click', function () {
             window.location.href = 'http://localhost:8080/AdminController/deconnexion';
         });
+    </script>
+
+    <script>
+        document.getElementById('Chats').addEventListener('click', function (key, value) {
+            window.location.href = 'http://localhost:3000/Login';
+        });
+
     </script>
 </div>
 </body>

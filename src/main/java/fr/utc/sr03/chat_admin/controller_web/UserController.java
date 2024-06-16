@@ -144,7 +144,6 @@ public class UserController {
                     chatUserRepository.deleteChatUsersByChatAndUser(chat, optionalUser.get());
                 }
             }
-
         }
     }
     @PostMapping("/updateChat")
