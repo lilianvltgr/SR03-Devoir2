@@ -36,15 +36,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws IOException {
         LOGGER.info(session.getId());
         System.out.println("ajout de la sessison" + session.getUri());
-
-        // Ajout de la nouvelle session a la liste
         sessions.add(session);
-
-        // Historique des messages
-//        for (MessageSocket messageSocket : messageSocketsHistory) {
-//            session.sendMessage(new TextMessage(messageSocket.getUser() + " : " + messageSocket.getMessage()));
-//        }
-
         LOGGER.info("Connexion etablie sur " + this.wsServerName);
     }
 
@@ -82,27 +74,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        ;
     }
-
-
-//    public void broadcast(String message, String chatId) throws IOException {
-//        // Envoi du message a toutes les sessions
-//        for (WebSocketSession session : sessions) {
-//            if (session != null) {
-//
-//                String uri = session.getUri().toString();
-//
-//                String chatIdSession = uri.split("hat/")[1].toString();
-//                if (chatId.equals(chatIdSession)) {
-//                    System.out.println("chatIdSession : " + chatIdSession);
-//                    System.out.println("Message envoyé pour la session " + session.getId());
-//                    session.sendMessage(new TextMessage(message));
-//                }
-//            }
-//        }
-//    }
-
     public void broadcast(MessageSocket messageSocket, String chatId) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String messageJson = mapper.writeValueAsString(messageSocket);

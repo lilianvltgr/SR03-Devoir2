@@ -29,7 +29,7 @@ public class AdminController {
     public String getUserList(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         List<User> users = userRepository.findAll();
         model.addAttribute("users", users);
@@ -40,7 +40,7 @@ public class AdminController {
     public String getUserInfos(Model model, @PathVariable Long userId, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         Optional<User> userOptional = userRepository.findByUserId(userId);
         if (userOptional.isPresent()) {
@@ -57,7 +57,7 @@ public class AdminController {
                                    @RequestParam("sort") Optional<Integer> sort) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
         switch (sort.orElse(0)) {
@@ -83,7 +83,7 @@ public class AdminController {
     public String getUserForm(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         model.addAttribute("user", new User()); // Ajoutez cette ligne pour lier le formulaire
         return "newUserForm";
@@ -94,14 +94,14 @@ public class AdminController {
     public String goHome(WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         return "homePage";
     }
 
     @GetMapping("/authentification")
     public String authentification() {
-        return "AuthentificationAdmin";
+        return "authentificationAdmin";
     }
 
     @GetMapping("/deconnexion")
@@ -126,16 +126,16 @@ public class AdminController {
     public String adminHomePage(WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
-        return "AdminHomePage";
+        return "adminHomePage";
     }
 
     @PostMapping("/addUser")
     public String postTruc(@ModelAttribute @Valid User user, BindingResult result, Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         if (result.hasErrors()) {
             return "newUserForm";
@@ -179,7 +179,7 @@ public class AdminController {
             }
         }
         model.addAttribute("authFailed", true);
-        return "AuthentificationAdmin";
+        return "authentificationAdmin";
     }
 
     @GetMapping("/getAdmins")
@@ -191,7 +191,7 @@ public class AdminController {
     public String getAdmins(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         List<User> admins = userRepository.findAdminOnly();
         model.addAttribute("admins", admins);
@@ -202,7 +202,7 @@ public class AdminController {
     public String deleteUser(Model model, @PathVariable Long userId, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         userRepository.deleteByUserId(userId);
         return getUserList(model, request);
@@ -219,7 +219,7 @@ public class AdminController {
                              Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         User user = new User(admin, active, lastname, firstname, email, password);
         user.setUserId(userId);
@@ -234,7 +234,7 @@ public class AdminController {
                                  @RequestParam("newPassword") String newPassword, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         System.out.println("User found: " + userOptional.isPresent());
@@ -243,7 +243,7 @@ public class AdminController {
             user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
         }
-        return "AuthentificationAdmin";
+        return "authentificationAdmin";
     }
 
     @GetMapping("/resetPassword")
@@ -258,7 +258,7 @@ public class AdminController {
                               @RequestParam("sort") Optional<Integer> sort) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
-            return "AuthentificationAdmin";
+            return "authentificationAdmin";
         }
         Sort sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "firstname");
         switch (sort.orElse(0)) {
