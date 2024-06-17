@@ -1,4 +1,5 @@
-    function toggleResetPasswordForm() {
+//Function used for reset the password
+function toggleResetPasswordForm() {
     var form = document.getElementById('resetPasswordForm');
     form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
 }

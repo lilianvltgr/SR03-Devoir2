@@ -1,14 +1,22 @@
 # Projet Chat-App
+Voltigeur Lilian et Chesnay Zoé
 ### Identifiants
 sr03p002 bHy2L69nZuwL
 
 ## Backend
 Implémentation en Java avec Springboot.
 Gestion d'un ensemble d'utilisateurs et de chats. Gestion de leur ajout, modification, suppression et sauvegarde en base de données mySQL.
+Le back contient deux controlleurs : 
+* admin controller gère toute la partie admin, communique indirectement avec la bdd et redirige vers les bonnes vues thymeleaf. 
+* User controller gère les requêtes du client (correspondant à l'application de chat). 
 
-![uml-back](https://github.com/lilianvltgr/SR03-Devoir2/assets/105502477/a4b2994d-077f-4962-836f-256b88f82152)
+Le back contient la gestion des sockets pour la communication reliée aux chats, certains scripts utilisés dans la partie admin ainsi que les templates permettant de créer l'interface admin.
 UML de la gestion du backend.
+![schemas.png](images%2Fschemas.png)
 
+### Thymeleaf
+Thymeleaf permet d'effectuer des vues dynamiques qui utilisent le modèle pour afficher des informations issues du controlleur. 
+Nous l'avons notamment utilisé pour afficher les informations d'un formulaire, afficher des informations relatives aux précédentes actions (comme la validation de l'ajout d'un utilisateur) ou récupérer un fragment thymeleaf issu d'un autre fichier. Nous avons aussi effectué des affichages conditionnels.
 ## Frontend 
 
 ### MUI 
@@ -49,3 +57,25 @@ Le client aurait communiqué son information chiffrée par le serveur et celui-c
 ### Hachage du mot de passe
 
 Encore une fois relié à la sécurité de l'application, le mot de passe n'est pas haché. Il aurait pu l'être pour améliorer sa difficulté de récupération par une personne tierce. 
+
+## GreenIt 
+* Page d'accueil sans chat 
+![OnlyHomePage.png](images%2FOnlyHomePage.png)
+
+
+* Programmation d'un chat![ScheduleChat.png](images%2FScheduleChat.png)
+
+
+* Ajouter un utilisateur (admin interface)![AddUserThymleaf.png](images%2FAddUserThymleaf.png)
+
+
+* Page contenant des chats ![Chats.png](images%2FChats.png)
+
+
+
+Merci pour la lecture ! 
+Voltigeur Lilian et Chesnay Zoé pour SR03.
+
+...
+|  ^_^  |
+...
