@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.css">
 <script src="https://cdn.jsdelivr.net/npm/@material/mwc-button@latest/dist/mwc-button.js"></script>
+<link rel="stylesheet" href="/css/homePage.css">
 <style>
     span.error {
         background-color: pink;
@@ -35,10 +36,12 @@
         <div th:replace="fragments :: sideBar"></div>
     </div>
     <div class="content">
+
         <div th:if="${lastUserAdded}" style="background-color: darkseagreen">
             <span th:text="'Dernier utilisateur ajouté : ' + ${lastUserAdded}"></span><br>
         </div>
-        <form action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
+        <form class="user-form" action="#" th:action="@{/AdminController/addUser}" method="POST" th:object="${user}">
+            <h2>Ajout d'un nouvel utilisateur</h2>
             <label for="lastname">Nom :</label>
             <input type="text" id="lastname" name="lastname" th:field="*{lastname}">
             <br th:if="${#fields.hasErrors('lastname')}">

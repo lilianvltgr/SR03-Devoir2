@@ -221,6 +221,7 @@ public class AdminController {
         List<User> users = userRepository.findAll();
         for (User entry : users) {
             if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
+                System.out.println("test");
                 model.addAttribute("currentAdmin", email);
                 model.addAttribute("userId", entry.getUserId());
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
@@ -296,12 +297,7 @@ public class AdminController {
     @PostMapping("/updatePassword")
     public String updatePassword(@RequestParam("mail") String mail,
                                  @RequestParam("newPassword") String newPassword, WebRequest request) {
-        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
-        if (connected == null || !connected.toString().equals("true")) {
-            return "authentificationAdmin";
-        }
         Optional<User> userOptional = userRepository.findUserByMail(mail);
-        System.out.println("User found: " + userOptional.isPresent());
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setPassword(newPassword);
@@ -343,6 +339,17 @@ public class AdminController {
         return "userList";
     }
 
-
+    /**
+     *
+     * @return a template
+     */
+    @GetMapping("/redirectAuth")
+    public String redirectAuth(WebRequest request) {
+        Object isAdmin = request.getAttribute("isAdmin", WebRequest.SCOPE_SESSION);
+        if (isAdmin != null && isAdmin.toString().equals("true")) {
+            return "redirect:/AdminController/adminHomePage";
+        }
+        return "redirect:/AdminController/authentification";
+    }
 }
 

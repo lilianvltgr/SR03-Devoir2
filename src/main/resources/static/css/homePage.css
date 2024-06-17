@@ -21,3 +21,43 @@ body {
 h1 {
     margin-bottom: 40px; /* Espace entre le titre et le bloc de boutons */
 }
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Utiliser 100vh pour occuper toute la hauteur de la fenêtre */
+}
+
+.login-form {
+    width: 350px;
+    border: 1px solid #ccc;
+    padding: 12px;
+    border-radius: 8px; /* Optionnel : pour arrondir les coins */
+    background-color: #fff; /* Optionnel : pour donner un fond blanc au formulaire */
+}
+.user-form {
+    width: 550px;
+    border: 1px solid #ccc;
+    padding: 12px;
+    border-radius: 8px; /* Optionnel : pour arrondir les coins */
+    background-color: #fff; /* Optionnel : pour donner un fond blanc au formulaire */
+}
+.user-form > label {
+    margin: 5px;
+
+}
+
+.login-input {
+    display: block;
+    width: 100%; /* Assurez-vous que les labels et les inputs occupent toute la largeur du conteneur */
+    margin-bottom: 8px; /* Ajouter de l'espace entre les éléments pour un meilleur espacement */
+    border-radius: 8px;
+    border: 1px solid #ccc;
+
+}
+
+.login-form > input {
+    padding: 8px; /* Ajouter du padding pour rendre les inputs plus confortables */
+}

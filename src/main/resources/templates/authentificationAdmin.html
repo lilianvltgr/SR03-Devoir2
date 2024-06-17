@@ -12,26 +12,27 @@
     <title>Authentification Administrateur</title>
 </head>
 <body>
-<div class="centered-content">
-    <H1>Authentification</H1>
-    <form id="myForm" action="/AdminController/isAdmin" onsubmit="return validateAdminAuthForm() " method="POST">
+<div class="login-container">
+    <H1>Administration</H1>
+    <form class="login-form" id="myForm" action="/AdminController/isAdmin" onsubmit="return validateAdminAuthForm() " method="POST">
         <label for="email">Email :</label>
-        <input type="email" id="email" name="email" required value="">
+        <input class="login-input" type="email" id="email" name="email" required value="">
         <br>
         <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required value="">
+        <input class="login-input" type="password" id="password" name="password" required value="">
         <br>
         <button type="submit">Se connecter</button>
     </form>
     <button onclick="toggleResetPasswordForm()"> Mot de passe oublié</button>
     <div id="resetPasswordForm" style="display:none">
-        <label for="resetEmail"></label><input type="email" id="resetEmail" name="resetEmail"
+        <label for="resetEmail"></label><input class="login-input" type="email" id="resetEmail" name="resetEmail"
                                                placeholder="Entrez votre email" required>
         <button type="submit" id="resetPage" onclick="sendResetLink()">Envoyer le lien</button>
     </div>
     <div th:if="${authFailed}" style="color:red">
         Authentification failed, please try again.
     </div>
+
 </div>
 </body>
 </html>

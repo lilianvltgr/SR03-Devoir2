@@ -66,6 +66,8 @@
         <div th:replace="fragments :: sideBar"></div>
     </div>
     <div class="content">
+        <h1>Utilisateurs</h1>
+
         <input type="text" id="myInput" onkeyup="search()" placeholder="Search for names.."><br>
         <ul id="myUL">
             <li th:each="user : ${users}"><span><md-fab label="Supprimer" id="delete" th:userId="${user.getUserId()}"
@@ -80,7 +82,7 @@
             <a th:unless="${current_page == 0 }" th:href="@{/AdminController/usersPage(page=${current_page - 1})}">Previous</a>
             <span th:text="${current_page}"></span>
             <a th:unless="${current_page == total_pages - 1}"
-               th:href="@{/AdminController/usersPage(page=${current_page + 1})}">Next</a>
+               th:href="@{/AdminController/usersPage(page=${current_page + 1})}">Prochaine page</a>
         </div>
     </div>
 </div>
