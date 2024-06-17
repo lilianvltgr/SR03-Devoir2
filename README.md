@@ -1,5 +1,5 @@
 # Projet Chat-App
-Voltigeur Lilian et Chesnay Zoé
+Voltigeur Lilian et Chesnais Zoé
 ### Identifiants
 sr03p002 bHy2L69nZuwL
 
@@ -69,7 +69,7 @@ Encore une fois relié à la sécurité de l'application, le mot de passe n'est 
 ### Page contenant des chats ![Chats.png](images%2FChats.png)
 
 Merci pour la lecture ! 
-Voltigeur Lilian et Chesnay Zoé pour SR03.
+Voltigeur Lilian et Chesnais Zoé pour SR03.
 
 ...
 |  ^_^  |
