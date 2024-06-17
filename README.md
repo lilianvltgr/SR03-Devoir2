@@ -7,8 +7,8 @@ sr03p002 bHy2L69nZuwL
 Implémentation en Java avec Springboot.
 Gestion d'un ensemble d'utilisateurs et de chats. Gestion de leur ajout, modification, suppression et sauvegarde en base de données mySQL.
 Le back contient deux controlleurs : 
-* admin controller gère toute la partie admin, communique indirectement avec la bdd et redirige vers les bonnes vues thymeleaf. 
-* User controller gère les requêtes du client (correspondant à l'application de chat). 
+* ``AdminController`` gère toute la partie admin, communique indirectement avec la bdd et redirige vers les bonnes vues thymeleaf. 
+* ``UserController`` gère les requêtes du client (correspondant à l'application de chat). 
 
 Le back contient la gestion des sockets pour la communication reliée aux chats, certains scripts utilisés dans la partie admin ainsi que les templates permettant de créer l'interface admin.
 UML de la gestion du backend.
@@ -41,12 +41,12 @@ Pour fixer un nombre de tentatives, il aurait fallu ajouter un compteur pour le 
 ### Passage de l'interface admin aux chats 
 
 Nous avons essayé de nombreuses manières de rester authentifié lors du passage entre les deux parties du projet: 
-* HttpServletRequest
-* WebRequest
-* Session
+* `HttpServletRequest`
+* `WebRequest`
+* `Session`
 * Passage des informations en argument de requête
 
-Ces methodes ne fonctionnaient pas et généraient toujours des problèmes. En effet, les httpServletRequest et webRequest ne conservaient pas leurs attributs entre les deux controlleurs, se réinitialisant, comme si une nouvelle session s'ouvrait. Le passage d'arguments pas l'url, utilisé auparavant semblait créer une faille de sécurité. 
+Ces méthodes ne fonctionnaient pas et généraient toujours des problèmes. En effet, les ``httpServletRequest`` et ``webRequest`` ne conservaient pas leurs attributs entre les deux controlleurs, se réinitialisant, comme si une nouvelle session s'ouvrait. Le passage d'arguments pas l'url, utilisé auparavant semblait créer une faille de sécurité. 
 Nous sommes donc toujours à la recherche d'une solution pour éviter la reconnexion entre chaque passage d'admin à chat ! 
 
 ### Utilisation des token 
@@ -58,20 +58,15 @@ Le client aurait communiqué son information chiffrée par le serveur et celui-c
 
 Encore une fois relié à la sécurité de l'application, le mot de passe n'est pas haché. Il aurait pu l'être pour améliorer sa difficulté de récupération par une personne tierce. 
 
-## GreenIt 
-* Page d'accueil sans chat 
+## GreenIt
+### Page d'accueil sans chat 
 ![OnlyHomePage.png](images%2FOnlyHomePage.png)
 
+### Programmation d'un chat![ScheduleChat.png](images%2FScheduleChat.png)
 
-* Programmation d'un chat![ScheduleChat.png](images%2FScheduleChat.png)
+### Ajouter un utilisateur (admin interface)![AddUserThymleaf.png](images%2FAddUserThymleaf.png)
 
-
-* Ajouter un utilisateur (admin interface)![AddUserThymleaf.png](images%2FAddUserThymleaf.png)
-
-
-* Page contenant des chats ![Chats.png](images%2FChats.png)
-
-
+### Page contenant des chats ![Chats.png](images%2FChats.png)
 
 Merci pour la lecture ! 
 Voltigeur Lilian et Chesnay Zoé pour SR03.
