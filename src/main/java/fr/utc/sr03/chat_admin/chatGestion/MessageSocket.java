@@ -1,5 +1,8 @@
 package fr.utc.sr03.chat_admin.chatGestion;
 
+/**
+ * MessageSocket class represents a message broadcasted by the {@link WebSocketHandler}.
+ */
 public class MessageSocket {
     private String message;
     private String user;

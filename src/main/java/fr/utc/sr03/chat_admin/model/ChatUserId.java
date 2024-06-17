@@ -2,6 +2,9 @@ package fr.utc.sr03.chat_admin.model;
 
 import java.io.Serializable;
 
+/**
+ * ChatUserId class identifies a ChatUser class.
+ */
 public class ChatUserId implements Serializable {
     long chat;
     long user;

@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * Interface for managing {@link ChatUser} entity relationships between {@link Chat} and {@link User}.
+ * Extends {@link JpaRepository} to provide common persistence methods and includes custom methods
+ * defined in {@link ChatUserRepositoryCustom} for additional operations.
+ */
 public interface ChatUserRepository extends JpaRepository<ChatUser,Integer>, ChatUserRepositoryCustom {
 
     List<ChatUser> findChatUsersByChat(Chat chat);

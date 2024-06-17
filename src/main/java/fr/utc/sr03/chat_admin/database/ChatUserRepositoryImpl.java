@@ -7,6 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of the {@link ChatUserRepositoryCustom} interface.
+ * This class provides custom repository functionalities to interact with {@link ChatUser} entities.
+ */
 @Repository
 public class ChatUserRepositoryImpl implements ChatUserRepositoryCustom{
     @PersistenceContext

@@ -9,9 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
-/*
-Classe repository qui contient toutes les méthodes propres à la base de données choisies
+
+/**
+ * Interface for managing {@link User} entities. This repository extends {@link JpaRepository}
+ * and includes custom methods for finding, deleting, and querying users based on various attributes.
  */
+
 public interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
     Optional<User> findByUserId(long id);
     @Transactional

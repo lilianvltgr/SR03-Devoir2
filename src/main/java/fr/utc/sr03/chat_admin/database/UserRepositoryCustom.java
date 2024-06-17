@@ -5,8 +5,10 @@ import fr.utc.sr03.chat_admin.model.ChatUser;
 import fr.utc.sr03.chat_admin.model.User;
 
 import java.util.List;
-/*
-Cette interface déclare les méthodes customisées pour la gestion de la bdd spécifique à ce projet
+
+/**
+ * Custom repository interface providing additional query methods for {@link User} entities.
+ * These methods include querying for admin users, finding chats created by a user, and finding users within a specific chat.
  */
 public interface UserRepositoryCustom {
     List<User> findAdminOnly();

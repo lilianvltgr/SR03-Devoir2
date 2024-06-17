@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+/**
+ * ChatUser class that joins the Chat class and the User class.
+ * Allows users to be part of a chat.
+ */
 @Entity
 @Table(name = "sr03_chatUser")
 @IdClass(ChatUserId.class)

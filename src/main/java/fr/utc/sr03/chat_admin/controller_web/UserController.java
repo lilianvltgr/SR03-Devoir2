@@ -26,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Rest Controller managing user interface in the application.
+ */
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/UserController")
@@ -41,6 +44,11 @@ public class UserController {
         this.chatUserRepository = chatUserRepository;
     }
 
+    /**
+     * Functiion that returns all user attributes.
+     * @param userId
+     * @return User infos
+     */
     @GetMapping("/userInfos/{userId}")
     public User getUserInfos(@PathVariable Long userId) {
         Optional<User> userOptional = userRepository.findByUserId(userId);
@@ -51,6 +59,13 @@ public class UserController {
         return null;
     }
 
+    /**
+     * Function that returns all user attributes with the user's email.
+     * The goal is for the email to be a second identifier for each user.
+     * Two users cannot have the same email.
+     * @param mail
+     * @return User infos
+     */
     @GetMapping("/getUserByMail")
     public User getUserByMail(String mail) {
         Optional<User> userOptional = userRepository.findUserByMail(mail);
@@ -61,23 +76,18 @@ public class UserController {
         return null;
     }
 
-//    @GetMapping("/authentification")
-//    public long authentification(String mail, String password) {
-//        Optional<User> userOptional = userRepository.findUserByMail(mail);
-//        if (userOptional.isPresent()) {
-//            User user = userOptional.get();
-//            if(Objects.equals(user.getPassword(), password)){
-//                return user.getUserId();
-//            }
-//        }
-//        return -1;
-//    }
-
+    /**
+     * Function that authentifies a user with his email and password.
+     * @param mail
+     * @param password
+     * @param request
+     * @param session
+     * @return userId to store in the frontend
+     */
     @PostMapping("/authentification")
     public long authentification(@RequestParam("mail") String mail,
                                               @RequestParam("password") String password,
-                                              WebRequest request,
-                                 HttpSession session
+                                              WebRequest request, HttpSession session
     ) {
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         if (userOptional.isPresent()) {
@@ -89,22 +99,33 @@ public class UserController {
                 session.setAttribute("connected", true);
                 session.setAttribute("user", user);
 
-
+// ------- PISTES DE RESOLUTION -----------
 //                Cookie sessionCookie = new Cookie("JSESSIONID", request.getSession().getId());
 //                sessionCookie.setHttpOnly(true);
 //                sessionCookie.setPath("/");
 //                sessionCookie.setSecure(true);
 //                response.addCookie(sessionCookie);
+
                 return user.getUserId();
             }
         }
         return -1;
     }
+
+    /**
+     * Function that a user list of all active users.
+     * @return a user list of all active users
+     */
     @GetMapping("/getAllActiveUsers")
     public List<User> getAllActiveUsers() {
         return userRepository.findAllByActive(true);
     }
 
+    /**
+     * Function that returns a userList of all users invited to the chat.
+     * @param chatId
+     * @return a userList
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/getUsersInChat/{chatId}")
     public List<User> getUsersInChat(@PathVariable Long chatId) {
@@ -116,6 +137,13 @@ public class UserController {
         return null;
     }
 
+    /**
+     * Function to add a user in the group chat.
+     * Creates a new ChatUser row entity.
+     * @param userId
+     * @param chatId
+     * @return ChatUser entity
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/addUserToChat")
     public ChatUser adUserToChat(@RequestParam Long userId, @RequestParam Long chatId) {
@@ -128,6 +156,12 @@ public class UserController {
         return null;
     }
 
+    /**
+     * Function that adds multiple users to the chat.
+     * Creates new ChatUser row entities.
+     * @param userIds
+     * @param chatId
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/addUsersToChat")
     public void adUserToChat(@RequestParam List<Long> userIds, @RequestParam Long chatId) {
@@ -144,12 +178,22 @@ public class UserController {
         }
     }
 
+    /**
+     * Function that returns a chat list of all the chats created by one user.
+     * @param userId
+     * @return chat list
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/chatsCreatedBy/{userId}")
     public List<Chat> getChatsUser(@PathVariable Long userId) {
         return chatRepository.findChatByCreatorId(userId);
     }
 
+    /**
+     * Fucntion that returns all the chats where the user was invited.
+     * @param userId
+     * @return a chat list
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/InvitedChatsFor/{userId}")
     public List<Chat> getInvitedChatsFor(@PathVariable Long userId) {
@@ -165,15 +209,31 @@ public class UserController {
         return null;
     }
 
+    /**
+     * Function that creates a new chat.
+     * @param chat
+     * @return Chat entity
+     */
     @PostMapping("/createChat")
     public Chat createChat(@RequestBody Chat chat) {
         return chatRepository.save(chat);
     }
 
+    /**
+     * Fucntion that deletes a chat
+     * @param chatId
+     * @return int
+     */
     @DeleteMapping("/deleteChat/{chatId}")
     public int deleteChat(@PathVariable Long chatId) {
         return chatRepository.deleteChatByChatId(chatId);
     }
+
+    /**
+     * Function that deletes a user from a group chat.
+     * Deletes corresponding entity from ChatUser table.
+     * @param chatId
+     */
 
     @DeleteMapping("/deleteChatUser/{chatId}")
     public void deleteChatUser(@PathVariable Long chatId) {
@@ -183,6 +243,12 @@ public class UserController {
         }
     }
 
+    /**
+     * Function that deletes several users from a group chat.
+     * Deletes corresponding entities from ChatUser table.
+     * @param userIds
+     * @param chatId
+     */
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/deleteChatUsers")
     public void deleteChatUsers(@RequestParam List<Long> userIds, @RequestParam Long chatId) {
@@ -197,6 +263,13 @@ public class UserController {
             }
         }
     }
+
+    /**
+     * Function that allows a chat to be modified.
+     * The entity is modified and nos created.
+     * @param chat
+     * @return Chat entity
+     */
     @PostMapping("/updateChat")
     public Chat updateChat(Chat chat) {
         return chatRepository.saveAndFlush(chat);

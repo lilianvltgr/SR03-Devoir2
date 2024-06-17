@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * Handles WebSocket connections for a specific WebSocket server.
+ * This handler manages the WebSocket sessions and stores a history of messages for each session.
+ * Each instance of this handler is associated with a specific WebSocket server, identified by a name.
+ */
 public class WebSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebSocketHandler.class);
     private final String wsServerName;
@@ -27,7 +32,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * Connexion établie
+     * Established connexion.
      *
      * @param session
      * @throws IOException
@@ -41,7 +46,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * Connexion fermee
+     * Closed connexion.
      *
      * @param session
      * @param status
@@ -54,7 +59,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * Reception d'un message
+     * Message reception.
      *
      * @param session
      * @param message
@@ -75,6 +80,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
             System.out.println(e.getMessage());
         }
     }
+
+    /**
+     * Broadcast action for a {@link MessageSocket}.
+     * @param messageSocket
+     * @param chatId
+     * @throws IOException
+     */
     public void broadcast(MessageSocket messageSocket, String chatId) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String messageJson = mapper.writeValueAsString(messageSocket);

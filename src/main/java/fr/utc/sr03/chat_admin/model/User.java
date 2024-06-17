@@ -3,9 +3,11 @@ package fr.utc.sr03.chat_admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-/*
-Dans le contexte de JPA, une entité représente une table dans la base de données relationnelle.
-Chaque instance de cette classe représente une ligne dans cette table.
+
+/**
+ * User class that represents a user of the application.
+ * A user is defined by a generated id, its name, lastname, email and password.
+ * A user can be admin or not and be active or not.
  */
 @Entity
 @Table(name = "sr03_users")

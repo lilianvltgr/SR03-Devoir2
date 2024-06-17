@@ -6,6 +6,11 @@ import jakarta.persistence.Table;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
+
+/**
+ * Chat class that represents a chat of the application.
+ * Is defined by a chatId, title, a duration (in hour), a description, a creationDate and a creatorId.
+ */
 @Entity
 @Table(name = "sr03_chats")
 public class Chat {

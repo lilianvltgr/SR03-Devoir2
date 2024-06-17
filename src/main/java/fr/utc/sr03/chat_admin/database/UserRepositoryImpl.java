@@ -1,5 +1,6 @@
 package fr.utc.sr03.chat_admin.database;
 
+import fr.utc.sr03.chat_admin.model.ChatUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
@@ -8,6 +9,10 @@ import fr.utc.sr03.chat_admin.model.User;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
+/**
+ * Implementation of the {@link UserRepositoryCustom} interface.
+ * This class provides custom repository functionalities to interact with {@link User} entities.
+ */
 @Repository
 public class UserRepositoryImpl implements UserRepositoryCustom{
     @PersistenceContext

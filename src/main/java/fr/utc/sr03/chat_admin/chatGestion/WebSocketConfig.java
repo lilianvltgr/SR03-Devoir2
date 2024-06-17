@@ -5,6 +5,11 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/**
+ * Configuration class for WebSocket connections in the "SR03 Chat Server".
+ * Enables WebSocket functionality and defines the endpoint and handler configurations
+ * for managing WebSocket connections.
+ */
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
