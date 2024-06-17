@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserReposi
     Integer deleteByUserId(long id);
     Optional<User> findUserByMail (String mail);
     List<User> findAllByActive (boolean active);
+    List<User> findAllByAdmin(boolean admin);
     Page<User> findByLastnameContainingIgnoreCase(String lastname, Pageable pageable);
     Page<User> findByActiveFalseAndLastnameContainingIgnoreCase(String lastname, Pageable pageable);
 }

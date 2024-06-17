@@ -35,7 +35,8 @@
         <div th:if="${userUpdated}" style="background-color: darkseagreen">
             <span> Les informations de l'utilisateur ont été modifiées</span><br>
         </div>
-        <form action="/AdminController/update" method="POST" onsubmit="return validateNewUserForm()">
+        <form class="user-form" action="/AdminController/update" method="POST" onsubmit="return validateNewUserForm()">
+            <h2> Informations de l'utilisateur </h2>
             <label for="lastname">Nom :</label>
             <input type="text" id="lastname" name="lastname" required th:value="${userInfos.getLastname()}">
             <br>

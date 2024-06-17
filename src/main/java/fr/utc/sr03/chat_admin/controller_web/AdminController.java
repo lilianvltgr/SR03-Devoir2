@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     /**
-     * Function used to get every user on the database and display it.
+     * Function used to get every user from the database and display it.
      * @return a template
      */
     @GetMapping("/users")
@@ -42,7 +42,9 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
         }
+        //find users
         List<User> users = userRepository.findAll();
+        // Add them to the model to display them in the template
         model.addAttribute("users", users);
         return "userList";
     }
@@ -92,7 +94,9 @@ public class AdminController {
                 sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "lastname");
                 break;
         }
-        Page<User> users = userRepository.findByActiveFalseAndLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 2, sortCriteria));
+        //Getting users
+        Page<User> users = userRepository.findByActiveFalseAndLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 5, sortCriteria));
+        // Adding users to the model
         model.addAttribute("users", users.getContent());
         model.addAttribute("current_page", page.orElse(0));
         model.addAttribute("total_pages", users.getTotalPages());
@@ -122,12 +126,9 @@ public class AdminController {
      * @return the home page template
      */
     @GetMapping("")
-    public String goHome(WebRequest request, HttpSession session) {
+    public String goHome(WebRequest request) {
         // Authentification verification
-        System.out.println(session.getAttribute("connected"));
-        System.out.println(session);
-        Object connected = session.getAttribute("connected");
-//        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
+        Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
         }
@@ -152,19 +153,6 @@ public class AdminController {
         request.removeAttribute("connected", WebRequest.SCOPE_SESSION);
         return "redirect:/AdminController";
     }
-//    /**
-//     * Function that redirects
-//     * @return a template
-//     */
-//    @GetMapping("/redirectAuth")
-//    public String redirectAuth(WebRequest request) {
-//        Object isAdmin = request.getAttribute("isAdmin", WebRequest.SCOPE_SESSION);
-//        if (isAdmin != null && isAdmin.toString().equals("true")) {
-//            return "redirect:/AdminController/adminHomePage";
-//        }
-//        return "redirect:/AdminController/authentification";
-//    }
-
     /**
      * Function used to access the admin home page
      * @return a template
@@ -192,79 +180,93 @@ public class AdminController {
         if (result.hasErrors()) {
             return "newUserForm";
         }
+        // regular expression used for password creation
         String regExp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!:;,?/.@#$%^&+=])(?=\\S+$).{8,20}$";
-
         Pattern pattern = Pattern.compile(regExp, Pattern.CASE_INSENSITIVE);
+        // Test the password matching with the regexp
         Matcher matcher = pattern.matcher(user.getPassword());
-
         if(!matcher.matches()){
             FieldError password = new FieldError("user", "password", "Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial");
             result.addError(password);
             return "newUserForm";
         }
-
+        // Try to find an user with the email
         Optional<User> existingUser = userRepository.findUserByMail(user.getMail());
         if (existingUser.isPresent()) {
+            // If the mail already exists an error is put in the result
             FieldError mail = new FieldError("user", "mail", "Un utilisateur possède déjà cet email.");
             result.addError(mail);
         } else {
+            // Finally the user is saved in the database
             userRepository.saveAndFlush(user);
+            // Adding the usernames to the model in order to display it in the template as the last user added
             model.addAttribute("lastUserAdded", user.getLastname() + " " + user.getFirstname());
         }
         return "newUserForm";
     }
-
+    /**
+     * Function that test if the email corresponds to an admin user and verify if the password is correct
+     * @return a template
+     */
     @PostMapping("/isAdmin")
     public String isAdmin(Model model, WebRequest request,
                           @RequestParam("password") String password,
                           @RequestParam("email") String email) {
-        List<User> users = userRepository.findAll();
+        // Getting all admin users
+        List<User> users = userRepository.findAdminOnly();
         for (User entry : users) {
             if (entry.getMail().equals(email) && (entry.getPassword().equals(password))) {
-                System.out.println("test");
                 model.addAttribute("currentAdmin", email);
                 model.addAttribute("userId", entry.getUserId());
                 request.setAttribute("email", email, WebRequest.SCOPE_SESSION);
                 request.setAttribute("connected", true, WebRequest.SCOPE_SESSION);
-                System.out.println("connected set");
                 request.setAttribute("isAdmin", true, WebRequest.SCOPE_SESSION);
                 return "homePage";
             }
         }
+        //If no user has been found, the template will display the fail
         model.addAttribute("authFailed", true);
         return "authentificationAdmin";
     }
-
-    @GetMapping("/connectedAdmin")
-    public String adminDashboard(HttpServletRequest request, Model model) {
-        User user = (User) request.getSession().getAttribute("user");
-
-        if (user != null) {
-            model.addAttribute("user", user);
-            return "adminHomePage";
-        } else {
-            return "authentificationAdmin";
-        }
-    }
-
-    @GetMapping("/getAdmins")
-    private List<User> getAdmins() {
-        return userRepository.findAdminOnly();
-    }
-
+//
+//    @GetMapping("/connectedAdmin")
+//    public String adminDashboard(HttpServletRequest request, Model model) {
+//        User user = (User) request.getSession().getAttribute("user");
+//
+//        if (user != null) {
+//            model.addAttribute("user", user);
+//            return "adminHomePage";
+//        } else {
+//            return "authentificationAdmin";
+//        }
+//    }
+//    @GetMapping("/getAdmins")
+//    private List<User> getAdmins() {
+//        return userRepository.findAdminOnly();
+//    }
+    /**
+     * FUnction used to get admins and display them
+     * @return the adminList template
+     */
     @GetMapping("/getAdminsTemplate")
     public String getAdmins(Model model, WebRequest request) {
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
         }
+        // Find users that are admins
         List<User> admins = userRepository.findAdminOnly();
+        // Adding theme to the model to display them in the template
         model.addAttribute("admins", admins);
         return "adminList";  // Assurez-vous que ceci correspond au nom du fichier dans /src/main/resources/templates
     }
-
+    /**
+     * Function to delete the user using its id
+     * @return an update template of users without the deleted one
+     */
     @DeleteMapping("/delete/{userId}")
     public String deleteUser(Model model, @PathVariable Long userId, WebRequest request) {
+        // Authentification validation
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
@@ -272,7 +274,10 @@ public class AdminController {
         userRepository.deleteByUserId(userId);
         return getUserList(model, request);
     }
-
+    /**
+     * Function that update an user
+     * @return a template
+     */
     @PostMapping("/update")
     public String updateUser(@RequestParam("password") String password,
                              @RequestParam("email") String email,
@@ -286,36 +291,52 @@ public class AdminController {
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
         }
+        // Creating a new user with the same Id that the one we want to update
         User user = new User(admin, active, lastname, firstname, email, password);
         user.setUserId(userId);
+        // Update the user in the database
         userRepository.saveAndFlush(user);
+        // Adding information to the model to display update in the template
         model.addAttribute("userInfos", user);
         model.addAttribute("userUpdated", true);
         return "userInfos";
     }
-
+    /**
+     * Function used to update the password when it is asked by the user (Simulates a password reinitialisation)
+     * @return a template
+     */
     @PostMapping("/updatePassword")
     public String updatePassword(@RequestParam("mail") String mail,
                                  @RequestParam("newPassword") String newPassword, WebRequest request) {
+        // Looking for the user
         Optional<User> userOptional = userRepository.findUserByMail(mail);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            //Updating the user's password
             user.setPassword(newPassword);
             userRepository.saveAndFlush(user);
         }
+        // Going back to the authentification page
         return "authentificationAdmin";
     }
-
+    /**
+     * Function that redirects to the password reintialisation page
+     * @return the template reinitialisationPage
+     */
     @GetMapping("/resetPassword")
     public String resetPasswordPage() {
         return "reinitialisationPage";
     }
-
+    /**
+     * Function that get users in a page format
+     * @return a template
+     */
     @GetMapping("usersPage")
     public String getUserList(Model model, WebRequest request,
                               @RequestParam("page") Optional<Integer> page,
                               @RequestParam("lastname") Optional<String> lastname,
                               @RequestParam("sort") Optional<Integer> sort) {
+        // Authentification verification
         Object connected = request.getAttribute("connected", WebRequest.SCOPE_SESSION);
         if (connected == null || !connected.toString().equals("true")) {
             return "authentificationAdmin";
@@ -329,7 +350,8 @@ public class AdminController {
                 sortCriteria = Sort.by(Sort.Direction.ASC, "lastname", "lastname");
                 break;
         }
-        Page<User> users = userRepository.findByLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 2, sortCriteria));
+        Page<User> users = userRepository.findByLastnameContainingIgnoreCase(lastname.orElse(""), PageRequest.of(page.orElse(0), 5, sortCriteria));
+        // Adding information in the model to display it in the template
         model.addAttribute("users", users.getContent());
         model.addAttribute("current_page", page.orElse(0));
         model.addAttribute("total_pages", users.getTotalPages());
@@ -340,7 +362,7 @@ public class AdminController {
     }
 
     /**
-     *
+     * Function that redirects for the authentification
      * @return a template
      */
     @GetMapping("/redirectAuth")
