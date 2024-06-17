@@ -1,10 +1,10 @@
 # Projet Chat-App
+### Identifiants
+sr03p002 bHy2L69nZuwL
 
 ## Backend
 Implémentation en Java avec Springboot.
 Gestion d'un ensemble d'utilisateurs et de chats. Gestion de leur ajout, modification, suppression et sauvegarde en base de données mySQL.
-
-// mettre identifiants
 
 ![uml-back](https://github.com/lilianvltgr/SR03-Devoir2/assets/105502477/a4b2994d-077f-4962-836f-256b88f82152)
 UML de la gestion du backend.
@@ -12,18 +12,19 @@ UML de la gestion du backend.
 ## Frontend 
 
 ### MUI 
+Le framework MUI a été utilisé et a grandement simplifié la disposition et l'affichage des balises grâce aux balises prédéfinies évitant une utilisation trop importante du css pour le style des éléments.
 
 ### React et l'option des fonctions 
-* UseState 
-* Useeffect
+Réact a été utilisé dans sa forme "fonction" c'est-à-dire qu'il n'y a pas de classes créées dans le code, uniquement des fonctions retournant du jsx, permettant d'afficher des éléments HTML.
+Cette méthode a été choisie car elle a été plus simple à assimiler pour Lilian qui n'avait jamais codé en React.
+C'est pourquoi le code contient des hooks utilisant UseState et UseEffect. 
 
 ### CSS 
-Des idées de conception et un style qui aurait pu aller plus loin 
+Le CSS a été utilisé pour placer les composant sur la page. Le style de l'application est trés rudimentaire, (surtout la partie admin). C'est par manque de temps que nous avons décidé de sacrifier cette partie. 
+Des idées de conceptions en sont toutefois ressorties. L'idée était d'avoir une couleur pour l'admin (violet) et une couleur pour les chats (bleu). L'utilisation de MUI a cependant permis d'obtenir une interface propre et minimaliste pour la partie chat. 
+Le css a aussi servi à designer le format des chats et les différents composants de l'application.
 
-
-
-
-## Reste à implémenter :
+## Autres possibles implémentations :
 Ces fonctionnalités demandées ou non dans le sujet auraient été un plus pour l'utilisation et la gestion du projet. 
 ### Nombre de tentatives de connexion et blocage du compte : 
 
